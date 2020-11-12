@@ -10,5 +10,7 @@ namespace Entities
     {
         public string ErrorMessage { get; set; }
         public string HeadOfMessage { get; set; }
+
+        public string BodyOfMessage { get; set; }
     }
 }

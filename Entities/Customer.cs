@@ -27,9 +27,7 @@ namespace Entities
         public bool IsAdmin { get; set; }
         [Required]
         public Guid Guid { get; set; }
-        [Required]
         public DateTime CreateDate { get; set; }
-        [Required]
         public DateTime ModifiedDate { get; set; }
         [Required]
         public string ModifiedUser { get; set; }

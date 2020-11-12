@@ -10,7 +10,7 @@ namespace Dal
 {
     class DatabaseContext : DbContext
     {
-        public DatabaseContext() : base("name=DenemeConnection")
+        public DatabaseContext() : base("name=DefaultConnection")
         {
 
         }

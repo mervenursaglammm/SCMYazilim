@@ -9,10 +9,10 @@ namespace Dal
 {
     public class Repository<T> where T : class
     {
-        DatabaseContext context = new DatabaseContext();
+        private DatabaseContext context = new DatabaseContext();
         public T Find(Expression<Func<T, bool>> where)
         {
-            return context.Set<T>().FirstOrDefault(where);
+            return context.Set<T>().Where(where).FirstOrDefault();
         }
         public List<T> List()
         {

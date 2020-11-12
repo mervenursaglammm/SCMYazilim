@@ -1,4 +1,6 @@
-﻿using Entities.ViewModels;
+﻿using Bl;
+using Entities;
+using Entities.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace SCMYazilim.Controllers
 {
     public class HomeController : Controller
     {
+        private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
         // GET: Home
         public ActionResult Index()
         {
@@ -20,22 +23,21 @@ namespace SCMYazilim.Controllers
         }
         public ActionResult SignUp()
         {
-
-
             return View();
         }
         [HttpPost]
         public ActionResult SignUp(RegisterViewModel registerViewModel)
         {
-            //if(ModelState.IsValid)
-            //{
-
-            //    if(registerViewModel.Email==null)
-            //    {
-
-            //    }
-            //}
-
+            if (ModelState.IsValid)
+            {
+                BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
+                if (bl_result.Messages.Count > 0)
+                {
+                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                    return View();
+                }
+                return View("SignIn");
+            }
             return View();
         }
     }

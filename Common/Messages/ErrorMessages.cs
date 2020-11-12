@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Common.Messages
 {
-    class ErrorMessages
+    public enum ErrorMessages
     {
+        RegisteredUser = 1
     }
 }

@@ -1,4 +1,5 @@
-﻿using Dal;
+﻿using Common.Messages;
+using Dal;
 using Entities;
 using Entities.ViewModels;
 using System;
@@ -20,7 +21,8 @@ namespace Bl
 
             if (customer != null)
             {
-                result.Messages.Add("Kayıtlı kullanıcı");
+                //result.Messages.Add("Kayıtlı kullanıcı");
+                result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
             }
             else
             {

@@ -9,5 +9,6 @@ namespace Entities
     public class Messages
     {
         public string ErrorMessage { get; set; }
+        public string HeadOfMessage { get; set; }
     }
 }

@@ -10,7 +10,6 @@ using System.Web.Mvc;
 
 namespace SCMYazilim.Controllers
 {
-    //[RoutePrefix("Sefa")]
     public class HomeController : Controller
     {
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();

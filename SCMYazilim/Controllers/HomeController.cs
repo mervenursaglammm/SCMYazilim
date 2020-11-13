@@ -23,9 +23,34 @@ namespace SCMYazilim.Controllers
         {
             return View();
         }
+
+        [Route("giris")]
+        [HttpPost]
+        public ActionResult SignIn(UserViewModel userViewModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                BL_Result<Customer> bl_result = customerManager.LogIn(userViewModel);
+                if (bl_result.Messages.Count > 0)
+                {
+                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                   
+                    return View();
+                }
+                else
+                {
+                    // Anasayfaya yönlendir...
+                }
+             
+            }
+            return View();
+
+        }
         [Route("uyelik")]
         public ActionResult SignUp()
         {
+
             return View();
         }
         [Route("uyelik")]

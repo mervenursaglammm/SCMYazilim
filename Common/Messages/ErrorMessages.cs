@@ -8,6 +8,8 @@ namespace Common.Messages
 {
     public enum ErrorMessages
     {
-        RegisteredUser = 1
+        RegisteredUser = 1,
+        UserNotFound=2,
+        UserNotActive=3,
     }
 }

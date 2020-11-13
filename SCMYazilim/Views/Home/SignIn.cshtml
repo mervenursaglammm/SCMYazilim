@@ -1,4 +1,5 @@
-﻿
+﻿@using Entities.ViewModels
+@model UserViewModel
 @{
     ViewBag.Title = "SignIn";
     Layout = "~/Views/Shared/_Sign.cshtml";
@@ -8,11 +9,13 @@
     <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Sign In</h2>
 </div>
 <div class="card-body">
-    <form>
+    @using (Html.BeginForm("SignIn", "Home", FormMethod.Post))
+    {
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         <div class="form-group mb-3">
-            <label>Username</label>
+            <label>E-mail Address</label>
             <div class="input-group">
-                <input name="username" type="text" class="form-control form-control-lg" />
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-lg", name = "email", type = "text" })
                 <span class="input-group-append">
                     <span class="input-group-text">
                         <i class="fas fa-user"></i>
@@ -27,7 +30,7 @@
                 <a href="pages-recover-password.html" class="float-right">Lost Password?</a>
             </div>
             <div class="input-group">
-                <input name="pwd" type="password" class="form-control form-control-lg" />
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-control form-control-lg", name = "pwd", type = "password" })
                 <span class="input-group-append">
                     <span class="input-group-text">
                         <i class="fas fa-lock"></i>
@@ -61,7 +64,6 @@
             Don't have an account yet?
             @Html.ActionLink("Sign Up!", "SignUp", "Home")
         </p>
-
-    </form>
+    }
 </div>
 

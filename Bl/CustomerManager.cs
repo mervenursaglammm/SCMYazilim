@@ -78,5 +78,27 @@ namespace Bl
                 repo.Update(customer);
             }
         }
+
+
+        public BL_Result<Customer> LogIn(UserViewModel userViewModel)
+        {
+            Customer customer = repo.Find(x => x.Email == userViewModel.Email && x.Password == userViewModel.Password);
+          
+            if(customer!=null)
+            {
+                if(customer.IsActive==false)
+                {
+                    result.addError(ErrorMessages.UserNotActive, "Kullanıcı aktif değil");
+                }
+
+            }
+
+            else
+            {
+                result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+            }
+            
+            return result;
+        }
     }
 }

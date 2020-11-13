@@ -19,16 +19,17 @@ namespace SCMYazilim.Controllers
         {
             return View();
         }
-        //[Route("giris")]
+        [Route("giris")]
         public ActionResult SignIn()
         {
             return View();
         }
-        //[Route("uyelik")]
+        [Route("uyelik")]
         public ActionResult SignUp()
         {
             return View();
         }
+        [Route("uyelik")]
         [HttpPost]
         public ActionResult SignUp(RegisterViewModel registerViewModel)
         {
@@ -44,9 +45,6 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
-
-
-
         public ActionResult Activation()
         {
             ViewBag.Message = "Invalid Activation code.";

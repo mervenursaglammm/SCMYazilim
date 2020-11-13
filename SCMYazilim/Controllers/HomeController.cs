@@ -69,6 +69,7 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
+        [Route("aktivasyon")]
         public ActionResult Activation(Guid id)
         {
             ViewBag.Message = "Invalid Activation code.";
@@ -80,6 +81,7 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
+        [Route("dashboard")]
         public ActionResult Dashboard()
         {
             if(Session["customer"] == null)

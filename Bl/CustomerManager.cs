@@ -70,7 +70,7 @@ namespace Bl
 
             if (customer == null)
             {
-                // Var ise hata mesajı
+                // Var ise hata mesajı...
             }
             else
             {

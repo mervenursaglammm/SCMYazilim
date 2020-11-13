@@ -40,9 +40,9 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
+                    Session["customer"] = userViewModel.Email;
                     return View("Dashboard");
                 }
-             
             }
             return View();
 

@@ -40,7 +40,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
-                    // Anasayfaya yönlendir...
+                    return View("Dashboard");
                 }
              
             }
@@ -79,6 +79,10 @@ namespace SCMYazilim.Controllers
                 return View();
             }
             return View();
+        }
+        public ActionResult Dashboard()
+        {
+            return View();    
         }
     }
 }

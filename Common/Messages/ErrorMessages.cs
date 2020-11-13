@@ -9,7 +9,7 @@ namespace Common.Messages
     public enum ErrorMessages
     {
         RegisteredUser = 1,
-        UserNotFound=2,
-        UserNotActive=3,
+        UserNotFound = 2,
+        UserNotActive = 3,
     }
 }

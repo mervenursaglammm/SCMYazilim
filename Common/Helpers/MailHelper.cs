@@ -15,10 +15,6 @@ namespace Common.Helpers
             using (MailMessage mm = new MailMessage("cnurztrk@gmail.com", mail))
             {
                 mm.Subject = "Account Activation";
-                //string body = "Hello " + name + ",";
-                //body += "<br /><br />Please click the following link to activate your account";
-                //body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", activationCode) + "'>Click here to activate your account.</a>";
-                //body += "<br /><br />Thanks";
                 string body = mailBody;
                 mm.Body = body;
                 mm.IsBodyHtml = true;

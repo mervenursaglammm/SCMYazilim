@@ -44,20 +44,15 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
-        public ActionResult Activation()
+        public ActionResult Activation(Guid id)
         {
             ViewBag.Message = "Invalid Activation code.";
-            if (RouteData.Values["id"] != null)
+            if (id != null)
             {
-                Guid activationCode = new Guid(RouteData.Values["id"].ToString());
-                Repository<Customer> repository = new Repository<Customer>();
-                Customer customer= repository.Find(x => x.Guid==activationCode);
-                customer.IsActive = true;
-                repository.Update(customer);
+                customerManager.Activation(id);
                 ViewBag.Message = "Activation successful.";
                 return View();
             }
-
             return View();
         }
     }

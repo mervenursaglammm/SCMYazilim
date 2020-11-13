@@ -64,5 +64,19 @@ namespace Bl
             }
             return result;
         }
+        public void Activation(Guid guid)
+        {
+            Customer customer = repo.Find(x => x.Guid == guid);
+
+            if (customer == null)
+            {
+                // Var ise hata mesajı
+            }
+            else
+            {
+                customer.IsActive = true;
+                repo.Update(customer);
+            }
+        }
     }
 }

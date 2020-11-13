@@ -35,7 +35,6 @@ namespace Dal
         }
         public int Update(T Obj)
         {
-            context.Entry(Obj).State = System.Data.Entity.EntityState.Modified;
             return Save();
         }
         public int Save()

@@ -5184,6 +5184,7 @@
     <Content Include="Views\Shared\_Sign.cshtml" />
     <Content Include="Views\Home\SignIn.cshtml" />
     <Content Include="Views\Home\SignUp.cshtml" />
+    <Content Include="Views\Home\Activation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -5199,6 +5200,10 @@
     <ProjectReference Include="..\Bl\Bl.csproj">
       <Project>{bb60b931-10dc-45db-b639-5dcb2a8c7fe3}</Project>
       <Name>Bl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dal\Dal.csproj">
+      <Project>{D8C9C57E-9716-425B-B6C2-6D40DBF09BB1}</Project>
+      <Name>Dal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{ECAAB111-065F-4A04-94C4-F09FE2005FAB}</Project>

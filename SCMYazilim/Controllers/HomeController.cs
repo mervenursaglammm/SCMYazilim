@@ -1,4 +1,5 @@
 ﻿using Bl;
+using Dal;
 using Entities;
 using Entities.ViewModels;
 using System;
@@ -36,8 +37,27 @@ namespace SCMYazilim.Controllers
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
                     return View();
                 }
-                return View("SignIn");
+                //return View("SignIn");
             }
+            return View();
+        }
+
+
+
+        public ActionResult Activation()
+        {
+            ViewBag.Message = "Invalid Activation code.";
+            if (RouteData.Values["id"] != null)
+            {
+                Guid activationCode = new Guid(RouteData.Values["id"].ToString());
+                Repository<Customer> repository = new Repository<Customer>();
+                Customer customer= repository.Find(x => x.Guid==activationCode);
+                customer.IsActive = true;
+                repository.Update(customer);
+                ViewBag.Message = "Activation successful.";
+                return View();
+            }
+
             return View();
         }
     }

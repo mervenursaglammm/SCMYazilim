@@ -84,5 +84,11 @@ namespace SCMYazilim.Controllers
         {
             return View();    
         }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return View("SignIn");
+        }
     }
 }

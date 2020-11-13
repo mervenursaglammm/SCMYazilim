@@ -82,6 +82,10 @@ namespace SCMYazilim.Controllers
         }
         public ActionResult Dashboard()
         {
+            if(Session["customer"] == null)
+            {
+                return View("SignIn");
+            }
             return View();    
         }
     }

@@ -10,6 +10,10 @@ namespace Dal
 {
     public class CreateDbContext : DbContext
     {
+        public CreateDbContext() : base ("name=BaseConnectionString")
+        {
+
+        }
         public CreateDbContext(string connectionString) : base(connectionString)
         {
             Database.SetInitializer<CreateDbContext>(new DropCreateDatabaseAlways<CreateDbContext>());

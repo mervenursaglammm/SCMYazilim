@@ -9,7 +9,7 @@ namespace Dal.Repository
 {
     public class CustomerRepository<T> : IRepository<T> where T : class
     {
-        CreateDbContext createDbContext = new CreateDbContext("BaseConnectionString");
+        CreateDbContext createDbContext = new CreateDbContext();
         public int Delete(T Obj)
         {
             createDbContext.Set<T>().Remove(Obj);

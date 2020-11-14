@@ -55,10 +55,9 @@ namespace Bl
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
                     var deneme = createContext.DenemeEntities.ToList();
 
-                    //int db_result = repo_customer.Insert(new DenemeEntity()
+                    //int db_result1 = repo_customer.Insert(new DenemeEntity()
                     //{
-                    //    Id = registerViewModel.Id,
-                    //    Str = registerViewModel.Str,
+                    //    str = registerViewModel.Name
                     //});
 
                     string body = "Hello " + result.Result.Name + ",";

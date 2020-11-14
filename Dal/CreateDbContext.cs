@@ -12,7 +12,7 @@ namespace Dal
     {
         public CreateDbContext(string connectionString) : base(connectionString)
         {
-            Database.SetInitializer<CreateDbContext>(new DropCreateDatabaseAlways<CreateDbContext>());
+            Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
         }
         public DbSet<DenemeEntity> DenemeEntities { get; set; }
     }

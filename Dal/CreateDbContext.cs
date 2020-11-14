@@ -10,7 +10,7 @@ namespace Dal
 {
     public class CreateDbContext : DbContext
     {
-        public CreateDbContext() : base ("name=BaseConnectionString")
+        public CreateDbContext()
         {
 
         }

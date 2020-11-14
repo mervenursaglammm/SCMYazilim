@@ -55,11 +55,10 @@ namespace Bl
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
                     var deneme = createContext.DenemeEntities.ToList();
 
-                    //int db_result1 = repo_customer.Insert(new DenemeEntity()
-                    //{
-                    
-                    //    str = registerViewModel.Name,
-                    //});
+                    int db_result1 = repo_customer.Insert(new DenemeEntity()
+                    {
+                        str = registerViewModel.Name
+                    });
 
                     string body = "Hello " + result.Result.Name + ",";
                     body += "<br /><br />Please click the following link to activate your account";

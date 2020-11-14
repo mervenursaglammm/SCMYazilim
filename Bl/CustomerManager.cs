@@ -20,7 +20,7 @@ namespace Bl
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
-        //private CustomerRepository<DenemeEntity> repo_customer = new CustomerRepository<DenemeEntity>();
+        private CustomerRepository<DenemeEntity> repo_customer = new CustomerRepository<DenemeEntity>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
@@ -55,10 +55,10 @@ namespace Bl
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
                     var deneme = createContext.DenemeEntities.ToList();
 
-                    //int db_result1 = repo_customer.Insert(new DenemeEntity()
-                    //{
-                    //    str = registerViewModel.Name
-                    //});
+                    int db_result1 = repo_customer.Insert(new DenemeEntity()
+                    {
+                        str = registerViewModel.Name
+                    });
 
                     string body = "Hello " + result.Result.Name + ",";
                     body += "<br /><br />Please click the following link to activate your account";

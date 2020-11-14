@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Dal.Repository
 {
-    class CustomerRepository<T> : IRepository<T> where T : class
+    public class CustomerRepository<T> : IRepository<T> where T : class
     {
-        CreateDbContext createDbContext = new CreateDbContext();
+        CreateDbContext createDbContext = new CreateDbContext("BaseConnectionString");
         public int Delete(T Obj)
         {
             createDbContext.Set<T>().Remove(Obj);

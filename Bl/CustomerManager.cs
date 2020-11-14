@@ -1,6 +1,7 @@
 ﻿using Common.Helpers;
 using Common.Messages;
 using Dal;
+using Dal.Repository;
 using Entities;
 using Entities.ViewModels;
 using System;

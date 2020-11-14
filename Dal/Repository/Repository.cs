@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dal.Repository
 {
-    class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         DatabaseContext databaseContext = new DatabaseContext();
         public int Delete(T Obj)

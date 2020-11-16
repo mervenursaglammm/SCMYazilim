@@ -14,6 +14,6 @@ namespace Dal
         {
             Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
         }
-        public DbSet<DenemeEntity> DenemeEntities { get; set; }
+        public DbSet<CustomerInfo> CustomerInfos { get; set; }
     }
 }

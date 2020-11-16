@@ -20,7 +20,7 @@ namespace Bl
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
-        private CustomerRepository<DenemeEntity> repo_customer = new CustomerRepository<DenemeEntity>();
+        private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
@@ -53,12 +53,23 @@ namespace Bl
 
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
-                    createContext.DenemeEntities.Add(new DenemeEntity()
+                    createContext.CustomerInfos.Add(new CustomerInfo()
                     {
-                        str = "sefa"
+                        Name = registerViewModel.Name,
+                        Email = registerViewModel.Email,
+                        Password = registerViewModel.Password,
+                        Repass = registerViewModel.Repass,
+                        IsActive = false,
+                        IsAdmin = true,
+                        Guid = Guid.NewGuid(),
+                        CreateDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUser = "System",
+                        Birthday = DateTime.Now,
+                        ProfileImage = ""
                     });
                     createContext.SaveChanges();
-                    createContext.DenemeEntities.ToList();
+
 
                     string body = "Hello " + result.Result.Name + ",";
                     body += "<br /><br />Please click the following link to activate your account";

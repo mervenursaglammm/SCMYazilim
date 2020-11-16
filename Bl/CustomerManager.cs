@@ -66,7 +66,7 @@ namespace Bl
                         ModifiedDate = DateTime.Now,
                         ModifiedUser = "System",
                         Birthday = DateTime.Now,
-                        ProfileImage = ""
+                        ProfileImage = "~/Content/Images/defaultUserImage.jpg"
                     });
                     createContext.SaveChanges();
 

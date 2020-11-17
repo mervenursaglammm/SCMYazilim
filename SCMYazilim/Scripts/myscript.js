@@ -6,9 +6,9 @@ function myFunction() {
 
     // If the checkbox is checked, display the output text
     if (checkBox.checked == true) {
-        text.style.display = "block";
-    } else {
         text.style.display = "none";
+    } else {
+        text.style.display = "block";
     }
 }
 

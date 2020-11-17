@@ -30,5 +30,7 @@ namespace Entities
         public DateTime ModifiedDate { get; set; }
         [Required]
         public string ModifiedUser { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyId { get; set; }
     }
 }

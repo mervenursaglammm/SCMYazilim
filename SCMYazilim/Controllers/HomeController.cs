@@ -63,12 +63,6 @@ namespace SCMYazilim.Controllers
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
 
-                // Türkçe karakter çevirme
-                //var text = registerViewModel.Name;
-                //var unaccentedText = String.Join("", text.Normalize(NormalizationForm.FormD)
-                //           .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
-                //var t = unaccentedText;
-
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));

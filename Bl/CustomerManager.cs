@@ -7,6 +7,7 @@ using Entities.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -36,6 +37,7 @@ namespace Bl
                 {
                     Name = registerViewModel.Name,
                     Email = registerViewModel.Email,
+                    CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
                     Password = registerViewModel.Password,
                     Repass = registerViewModel.Repass,
                     IsActive = false,
@@ -57,7 +59,8 @@ namespace Bl
                     {
                         Name = registerViewModel.Name,
                         Email = registerViewModel.Email,
-                        Password = registerViewModel.Password,
+                        CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                          Password = registerViewModel.Password,
                         Repass = registerViewModel.Repass,
                     
                         IsAdmin = true,

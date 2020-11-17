@@ -17,5 +17,6 @@ namespace Entities.ViewModels
         public string Password { get; set; }
         [Required, MinLength(6)]
         public string Repass { get; set; }
+        public string CompanyName { get; set; }
     }
 }

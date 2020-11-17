@@ -70,7 +70,6 @@ namespace Bl
                     });
                     createContext.SaveChanges();
 
-
                     string body = "Hello " + result.Result.Name + ",";
                     body += "<br /><br />Please click the following link to activate your account";
                     body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
@@ -99,8 +98,8 @@ namespace Bl
         public BL_Result<Customer> LogIn(UserViewModel userViewModel)
         {
             Customer customer = repo.Find(x => x.Email == userViewModel.Email && x.Password == userViewModel.Password);
-          
-            if(customer != null)
+
+            if (customer != null)
             {
                 if(customer.IsActive == false)
                 {

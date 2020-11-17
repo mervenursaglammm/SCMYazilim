@@ -45,7 +45,6 @@ namespace SCMYazilim.Controllers
                 }
             }
             return View();
-
         }
         [Route("uyelik")]
         public ActionResult SignUp()
@@ -81,7 +80,7 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
-        [Route("dashboard")]
+
         public ActionResult Dashboard()
         {
             if(Session["customer"] == null)
@@ -89,6 +88,11 @@ namespace SCMYazilim.Controllers
                 return View("SignIn");
             }
             return View();    
+        }
+
+        public ActionResult Profile()
+        {
+            return View();
         }
 
         public ActionResult Logout()

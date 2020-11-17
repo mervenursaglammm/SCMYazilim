@@ -17747,6 +17747,23 @@ html.header-dark .userbox .dropdown-menu a {
 	text-transform: none;
 }
 
+.thumb-info .thumb-info-edit {
+	transition: all 0.3s;
+	background: transparent;
+	bottom: 10%;
+	color: #FFF;
+	font-size: 18px;
+	font-weight: 700;
+	right: 0;
+	bottom: 0;
+	letter-spacing: -1px;
+	padding: 9px 11px 9px;
+	position: absolute;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	text-transform: uppercase;
+	z-index: 1;
+}
+
 /* Widget - Widget Toggle/Expand */
 .widget-toggle-expand .widget-header {
 	position: relative;

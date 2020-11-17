@@ -20,7 +20,7 @@ namespace Bl
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
-        private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
+      //  private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
@@ -40,7 +40,7 @@ namespace Bl
                     Repass = registerViewModel.Repass,
                     IsActive = false,
                     IsAdmin = true,
-                    Guid = Guid.NewGuid(),
+                    Guid = Guid.NewGuid().ToString().Substring(0,6),
                     CreateDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
                     ModifiedUser = "System",
@@ -52,23 +52,23 @@ namespace Bl
                     result.Result = repo.Find(x => x.Email == registerViewModel.Email);
 
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                    CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
-                    createContext.CustomerInfos.Add(new CustomerInfo()
+                        CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
+                      createContext.CustomerInfos.Add(new CustomerInfo()
                     {
                         Name = registerViewModel.Name,
                         Email = registerViewModel.Email,
                         Password = registerViewModel.Password,
                         Repass = registerViewModel.Repass,
-                        IsActive = false,
+                    
                         IsAdmin = true,
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.NewGuid().ToString().Substring(0, 6),
                         CreateDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
                         ModifiedUser = "System",
                         Birthday = DateTime.Now,
                         ProfileImage = "~/Content/Images/defaultUserImage.jpg"
                     });
-                    createContext.SaveChanges();
+                      createContext.SaveChanges();
 
 
                     string body = "Hello " + result.Result.Name + ",";
@@ -82,7 +82,7 @@ namespace Bl
             }
             return result;
         }
-        public void Activation(Guid guid)
+        public void Activation(string guid)
         {
             Customer customer = repo.Find(x => x.Guid == guid);
 

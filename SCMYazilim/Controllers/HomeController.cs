@@ -70,7 +70,7 @@ namespace SCMYazilim.Controllers
             return View();
         }
         //[Route("aktivasyon")]
-        public ActionResult Activation(Guid id)
+        public ActionResult Activation(string id)
         {
             ViewBag.Message = "Invalid Activation code.";
             if (id != null)

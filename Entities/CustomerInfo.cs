@@ -21,12 +21,11 @@ namespace Entities
         public string Repass { get; set; }
         public DateTime Birthday { get; set; }
         public string ProfileImage { get; set; }
-        [Required]
-        public bool IsActive { get; set; }
+   
         [Required]
         public bool IsAdmin { get; set; }
         [Required]
-        public Guid Guid { get; set; }
+        public string Guid { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         [Required]

@@ -4,7 +4,9 @@ using Entities;
 using Entities.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -60,6 +62,13 @@ namespace SCMYazilim.Controllers
             if (ModelState.IsValid)
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
+
+                // Türkçe karakter çevirme
+                //var text = registerViewModel.Name;
+                //var unaccentedText = String.Join("", text.Normalize(NormalizationForm.FormD)
+                //           .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+                //var t = unaccentedText;
+
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));

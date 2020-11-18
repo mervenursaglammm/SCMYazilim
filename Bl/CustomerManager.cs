@@ -24,45 +24,62 @@ namespace Bl
         //private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
-            Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-            //Kullanicinin kayitli olma durumu kontrolu
-            if (customer != null)
-            {
-                //result.Messages.Add("Kayıtlı kullanıcı");
-                result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
+            var searchCompanyId=registerViewModel.CompanyId;
+            if (searchCompanyId != null) {
+                Customer customer = repo.Find(x => x.CompanyId == searchCompanyId);
+                if(customer != null)
+                {
+                    string deneme = customer.CompanyName + customer.Id;
+                }
+                else
+                {
+                    result.addError(ErrorMessages.CompanyNotFound, "Böyle bir şirket bulunamadı.");
+                }
             }
             else
             {
-                int db_result = repo.Insert(new Customer()
+                Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
+                //Kullanicinin kayitli olma durumu kontrolu
+                if (customer != null)
                 {
-                    Name = registerViewModel.Name,
-                    Email = registerViewModel.Email,
-                    CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                    Password = registerViewModel.Password,
-                    Repass = registerViewModel.Repass,
-                    IsActive = false,
-                    IsAdmin = true,
-                    Guid = Guid.NewGuid().ToString(),
-                    CompanyId = Guid.NewGuid().ToString().Substring(0,6),
-                    CreateDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    ModifiedUser = "System",
-                    Birthday = DateTime.Now
-                });
-
-                if (db_result > 0)
+                    //result.Messages.Add("Kayıtlı kullanıcı");
+                    result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
+                }
+                else
                 {
-                    result.Result = repo.Find(x => x.Email == registerViewModel.Email);
-                    //Aktivasyon Maili Gonderme
-                    string body = "Hello " + result.Result.Name + ",";
-                    body += "<br /><br />Please click the following link to activate your account";
-                    body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
-                    body += "<br /><br />Thanks";
+                    int db_result = repo.Insert(new Customer()
+                    {
+                        Name = registerViewModel.Name,
+                        Email = registerViewModel.Email,
+                        CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                        Password = registerViewModel.Password,
+                        Repass = registerViewModel.Repass,
+                        IsActive = false,
+                        IsAdmin = true,
+                        Guid = Guid.NewGuid().ToString(),
+                        CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                        CreateDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUser = "System",
+                        Birthday = DateTime.Now
+                    });
 
-                    MailHelper mailHelper = new MailHelper();
-                    mailHelper.SendMail(result.Result.Email, body);
+                    if (db_result > 0)
+                    {
+                        result.Result = repo.Find(x => x.Email == registerViewModel.Email);
+                        //Aktivasyon Maili Gonderme
+                        string body = "Hello " + result.Result.Name + ",";
+                        body += "<br /><br />Please click the following link to activate your account";
+                        body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
+                        body += "<br /><br />Thanks";
+
+                        MailHelper mailHelper = new MailHelper();
+                        mailHelper.SendMail(result.Result.Email, body);
+                    }
                 }
             }
+            
+
             return result;
         }
         public void Activation(string guid)

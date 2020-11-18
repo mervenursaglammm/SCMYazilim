@@ -42,7 +42,7 @@
         </div>
         <div class="form-group mb-0" id="sirketKimligi" style="display:block;">
             <label>Şirket Kimliği</label>
-            <input type="text" id="dene" class="form-control form-control-lg" />
+            @Html.TextBoxFor(model => model.CompanyId, new { @class = "form-control form-control-lg", name = "companyId", type = "text" })
         </div>
 
         <div class="row">

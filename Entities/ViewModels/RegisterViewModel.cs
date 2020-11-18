@@ -18,5 +18,6 @@ namespace Entities.ViewModels
         [Required, MinLength(6)]
         public string Repass { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyId { get; set; }
     }
 }

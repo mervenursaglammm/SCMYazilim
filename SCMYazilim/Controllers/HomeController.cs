@@ -73,16 +73,16 @@ namespace SCMYazilim.Controllers
                 //var t = unaccentedText;
 
 
-                var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
-                List<string> alldatabases = new List<string>();
+                //var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");----
+                //List<string> alldatabases = new List<string>();
 
-                foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
-                {
-                    alldatabases.Add(db.Name);
-                }
+                //foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
+                //{
+                //    alldatabases.Add(db.Name);
+                //}
 
-                List<string> alldatabasesSon = new List<string>();
-                alldatabasesSon = alldatabases;
+                //List<string> alldatabasesSon = new List<string>();
+                //alldatabasesSon = alldatabases;-----
 
                 //if (bl_result.Messages.Count > 0)
                 //{

@@ -2,8 +2,12 @@
 using Dal;
 using Entities;
 using Entities.ViewModels;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -68,15 +72,29 @@ namespace SCMYazilim.Controllers
                 //           .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
                 //var t = unaccentedText;
 
-                if (bl_result.Messages.Count > 0)
+
+                var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
+                List<string> alldatabases = new List<string>();
+
+                foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
                 {
-                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-                    return View();
+                    alldatabases.Add(db.Name);
                 }
+
+                List<string> alldatabasesSon = new List<string>();
+                alldatabasesSon = alldatabases;
+
+                //if (bl_result.Messages.Count > 0)
+                //{
+                //    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                //    return View();
+                //}
                 //return View("SignIn");
             }
             return View();
         }
+
+
         //[Route("aktivasyon")]
         public ActionResult Activation(string id)
         {

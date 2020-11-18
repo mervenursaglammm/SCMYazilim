@@ -7,6 +7,7 @@ using Entities.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -20,11 +21,11 @@ namespace Bl
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
-      //  private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
+        //private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-
+            //Kullanicinin kayitli olma durumu kontrolu
             if (customer != null)
             {
                 //result.Messages.Add("Kayıtlı kullanıcı");
@@ -36,11 +37,13 @@ namespace Bl
                 {
                     Name = registerViewModel.Name,
                     Email = registerViewModel.Email,
+                    CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
                     Password = registerViewModel.Password,
                     Repass = registerViewModel.Repass,
                     IsActive = false,
                     IsAdmin = true,
-                    Guid = Guid.NewGuid().ToString().Substring(0,6),
+                    Guid = Guid.NewGuid().ToString(),
+                    CompanyId = Guid.NewGuid().ToString().Substring(0,6),
                     CreateDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
                     ModifiedUser = "System",
@@ -50,26 +53,7 @@ namespace Bl
                 if (db_result > 0)
                 {
                     result.Result = repo.Find(x => x.Email == registerViewModel.Email);
-
-                    string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                        CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + result.Result.Id));
-                      createContext.CustomerInfos.Add(new CustomerInfo()
-                    {
-                        Name = registerViewModel.Name,
-                        Email = registerViewModel.Email,
-                        Password = registerViewModel.Password,
-                        Repass = registerViewModel.Repass,
-                    
-                        IsAdmin = true,
-                        Guid = Guid.NewGuid().ToString().Substring(0, 6),
-                        CreateDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now,
-                        ModifiedUser = "System",
-                        Birthday = DateTime.Now,
-                        ProfileImage = "~/Content/Images/defaultUserImage.jpg"
-                    });
-                      createContext.SaveChanges();
-
+                    //Aktivasyon Maili Gonderme
                     string body = "Hello " + result.Result.Name + ",";
                     body += "<br /><br />Please click the following link to activate your account";
                     body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
@@ -92,6 +76,27 @@ namespace Bl
             else
             {
                 customer.IsActive = true;
+
+                string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
+                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + customer.Id));
+                createContext.CustomerInfos.Add(new CustomerInfo()
+                {
+                    Name = customer.Name,
+                    Email = customer.Email,
+                    CompanyName = String.Join("", customer.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                    Password = customer.Password,
+                    Repass = customer.Repass,
+                    CompanyId = customer.CompanyId,
+                    Guid=Guid.NewGuid().ToString().Substring(0,6),
+                    IsAdmin = true,
+                    CreateDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedUser = "System",
+                    Birthday = DateTime.Now,
+                    ProfileImage = "~/Content/Images/defaultUserImage.jpg"
+                }); ;
+                createContext.SaveChanges();
+
                 repo.Update(customer);
             }
         }

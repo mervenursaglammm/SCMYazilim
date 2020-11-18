@@ -95,7 +95,7 @@ namespace Bl
                 customer.IsActive = true;
 
                 string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, "customer" + customer.Id));
+                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString,customer.CompanyName + customer.Id));
                 createContext.CustomerInfos.Add(new CustomerInfo()
                 {
                     Name = customer.Name,

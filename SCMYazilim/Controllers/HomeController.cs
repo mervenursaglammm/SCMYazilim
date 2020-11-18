@@ -84,12 +84,12 @@ namespace SCMYazilim.Controllers
                 //List<string> alldatabasesSon = new List<string>();
                 //alldatabasesSon = alldatabases;-----
 
-                //if (bl_result.Messages.Count > 0)
-                //{
-                //    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-                //    return View();
-                //}
-                //return View("SignIn");
+                if (bl_result.Messages.Count > 0)
+                {
+                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                    return View();
+                }
+                return View("SignIn");
             }
             return View();
         }

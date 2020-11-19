@@ -55,11 +55,11 @@ namespace Bl
                             {
                                 Name = registerViewModel.Name,
                                 Email = registerViewModel.Email,
-                                CompanyName = registerViewModel.CompanyId,
+                                CompanyName = registerViewModel.CompanyName,
                                 Password = registerViewModel.Password,
                                 Repass = registerViewModel.Repass,
                                 IsAdmin = false,
-                                CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                                CompanyId = registerViewModel.CompanyId,
                                 CreateDate = DateTime.Now,
                                 ModifiedDate = DateTime.Now,
                                 ModifiedUser = "System",
@@ -108,7 +108,7 @@ namespace Bl
                         result.Result = repo.Find(x => x.Email == registerViewModel.Email);
                         //Aktivasyon Maili Gonderme
                         string body = "Hello " + result.Result.Name + ",";
-                        body += "<br /><br />Please click the following link to activate your account";
+                        body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: "+result.Result.CompanyId;
                         body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
                         body += "<br /><br />Thanks";
 

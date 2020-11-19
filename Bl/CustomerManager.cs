@@ -31,7 +31,7 @@ namespace Bl
                 if (customer != null)
                 {
                     string deneme = customer.CompanyName + customer.Id;
-                    var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
+                    var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-8QRCF5A\SQLEXPRESS");
                     List<string> alldatabases = new List<string>();
 
                     foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
@@ -159,7 +159,8 @@ namespace Bl
         {
 
             Customer customer = repo.Find( x=> x.CompanyId == userViewModel.CompanyId);
-            if (customer != null) {
+            if (customer != null)
+            {
                 string companyDatabase = customer.CompanyName + customer.Id;
                 var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-8QRCF5A\SQLEXPRESS");
                 List<string> alldatabases = new List<string>();
@@ -175,51 +176,20 @@ namespace Bl
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
                     CustomerInfo _customerInfo = repo_customer.Find(x => x.Email == userViewModel.Email, string.Format(baseConnectionString, databaseName));
-                    if(_customerInfo==null)
+                    if (_customerInfo == null)
                     {
-                        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı");
-
+                        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
                     }
-
-                    else
-                    {
-                        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı");
-                    }
-
                 }
-             }
-            //else if(customer != null)
-            //{
-            //   Customer _customer = repo.Find(x => x.Email == userViewModel.Email && x.Password == userViewModel.Password);
-
-            //    if (_customer != null)
-            //    {
-            //        if (_customer.IsActive == false)
-            //        {
-            //            result.addError(ErrorMessages.UserNotActive, "Kullanıcı aktif değil");
-            //        }
-
-            //    }
-            //    else
-            //    {
-            //        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı");
-            //    }
-            //}
-
-
-
-            //if (customer != null)
-            //{
-            //    if (customer.IsActive == false)
-            //    {
-            //        result.addError(ErrorMessages.UserNotActive, "Kullanıcı aktif değil");
-            //    }
-            //}
-            //else
-            //{
-            //    result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı");
-            //}
-            //return result;
+                else
+                {
+                    result.addError(ErrorMessages.CompanyNotFound, "Şirket bulunamadı.");
+                }
+            }
+            else
+            {
+                result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+            }
             return result;
         }
     }

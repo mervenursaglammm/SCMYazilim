@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Entities.ViewModels
 {
-   public class UserViewModel
+    public class UserViewModel
     {
         [Required, EmailAddress]
         public string Email { get; set; }
         [Required, MinLength(6)]
         public string Password { get; set; }
-     
+        public string CompanyId { get; set; }
        
     }
 }

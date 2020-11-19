@@ -21,15 +21,54 @@ namespace Bl
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
-        //private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
+        private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
-            var searchCompanyId=registerViewModel.CompanyId;
-            if (searchCompanyId != null) {
+            var searchCompanyId = registerViewModel.CompanyId;
+            if (searchCompanyId != null)
+            {
                 Customer customer = repo.Find(x => x.CompanyId == searchCompanyId);
-                if(customer != null)
+                if (customer != null)
                 {
                     string deneme = customer.CompanyName + customer.Id;
+                    var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
+                    List<string> alldatabases = new List<string>();
+
+                    foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
+                    {
+                        alldatabases.Add(db.Name);
+                    }
+
+                    string databasename = alldatabases.Find(d => d == deneme);
+                    if (databasename != "")
+                    {
+                        string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
+                        CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
+                        CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
+                        if (user != null)
+                        {
+                            result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
+                        }
+                        else
+                        {
+                            createContext.CustomerInfos.Add(new CustomerInfo()
+                            {
+                                Name = registerViewModel.Name,
+                                Email = registerViewModel.Email,
+                                CompanyName = registerViewModel.CompanyId,
+                                Password = registerViewModel.Password,
+                                Repass = registerViewModel.Repass,
+                                IsAdmin = false,
+                                CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                                CreateDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now,
+                                ModifiedUser = "System",
+                                Birthday = DateTime.Now
+                            });
+                            createContext.SaveChanges();
+                        }
+                    }
+
                 }
                 else
                 {
@@ -39,7 +78,7 @@ namespace Bl
             else
             {
                 Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-                //Kullanicinin kayitli olma durumu kontrolu
+              //  Kullanicinin kayitli olma durumu kontrolu
                 if (customer != null)
                 {
                     //result.Messages.Add("Kayıtlı kullanıcı");
@@ -78,7 +117,7 @@ namespace Bl
                     }
                 }
             }
-            
+
 
             return result;
         }
@@ -88,14 +127,14 @@ namespace Bl
 
             if (customer == null)
             {
-                // Var ise hata mesajı...
+                //Var ise hata mesajı...
             }
             else
             {
                 customer.IsActive = true;
 
                 string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString,customer.CompanyName + customer.Id));
+                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
                 createContext.CustomerInfos.Add(new CustomerInfo()
                 {
                     Name = customer.Name,
@@ -104,7 +143,6 @@ namespace Bl
                     Password = customer.Password,
                     Repass = customer.Repass,
                     CompanyId = customer.CompanyId,
-                    Guid=Guid.NewGuid().ToString().Substring(0,6),
                     IsAdmin = true,
                     CreateDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
@@ -123,7 +161,7 @@ namespace Bl
 
             if (customer != null)
             {
-                if(customer.IsActive == false)
+                if (customer.IsActive == false)
                 {
                     result.addError(ErrorMessages.UserNotActive, "Kullanıcı aktif değil");
                 }
@@ -137,3 +175,6 @@ namespace Bl
         }
     }
 }
+
+
+

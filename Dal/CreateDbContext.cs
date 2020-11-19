@@ -10,10 +10,17 @@ namespace Dal
 {
     public class CreateDbContext : DbContext
     {
+        public CreateDbContext()
+        {
+            Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
+        }
         public CreateDbContext(string connectionString) : base(connectionString)
         {
             Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
         }
         public DbSet<CustomerInfo> CustomerInfos { get; set; }
+
+
+
     }
 }

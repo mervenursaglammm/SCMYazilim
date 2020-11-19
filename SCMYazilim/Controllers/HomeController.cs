@@ -1,5 +1,6 @@
 ﻿using Bl;
 using Dal;
+using Dal.Repository;
 using Entities;
 using Entities.ViewModels;
 using Microsoft.SqlServer.Management.Common;
@@ -19,6 +20,7 @@ namespace SCMYazilim.Controllers
     public class HomeController : Controller
     {
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
+        private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
         // GET: Home
         public ActionResult Index()
         {
@@ -47,6 +49,7 @@ namespace SCMYazilim.Controllers
                 else
                 {
                     Session["customer"] = userViewModel.Email;
+                    Session["customerCompanyId"] =userViewModel.CompanyId;
                     return View("Dashboard");
                 }
             }

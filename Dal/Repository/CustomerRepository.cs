@@ -22,6 +22,11 @@ namespace Dal.Repository
             return createDbContext.Set<T>().Where(where).FirstOrDefault();
         }
 
+        public T Find(Expression<Func<T, bool>> where,string conStr)
+        {
+            CreateDbContext createDbContext1 = new CreateDbContext(conStr);
+            return createDbContext1.Set<T>().Where(where).FirstOrDefault();
+        }
         public int Insert(T Obj)
         {
             createDbContext.Set<T>().Add(Obj);

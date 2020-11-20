@@ -33,15 +33,7 @@ namespace Bl
                 if (customer != null)
                 {
                     string deneme = customer.CompanyName + customer.Id;
-                    var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
-                    List<string> alldatabases = new List<string>();
-
-                    foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
-                    {
-                        alldatabases.Add(db.Name);
-                    }
-
-                    string databasename = alldatabases.Find(d => d == deneme);
+                    string databasename = Connection.DatabaseConnection(deneme);
                     if (databasename != "")
                     {
                         string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
@@ -53,25 +45,22 @@ namespace Bl
                         }
                         else
                         {
-                           
-                                createContext.CustomerInfos.Add(new CustomerInfo()
-                                {
-                                    Name = registerViewModel.Name,
-                                    Email = registerViewModel.Email,
-                                    CompanyName = registerViewModel.CompanyName,
-                                    Password = EncodePassword(registerViewModel.Password),
-                                    Repass = EncodePassword(registerViewModel.Repass),
-                                    IsAdmin = false,
-                                    CompanyId = registerViewModel.CompanyId,
-                                    CreateDate = DateTime.Now,
-                                    ModifiedDate = DateTime.Now,
-                                    ModifiedUser = "System",
-                                    Birthday = DateTime.Now
-                                });
-                                createContext.SaveChanges();
-                           
-                            } 
-                        {
+
+                            createContext.CustomerInfos.Add(new CustomerInfo()
+                            {
+                                Name = registerViewModel.Name,
+                                Email = registerViewModel.Email,
+                                CompanyName = registerViewModel.CompanyName,
+                                Password = EncodePassword(registerViewModel.Password),
+                                Repass = EncodePassword(registerViewModel.Repass),
+                                IsAdmin = false,
+                                CompanyId = registerViewModel.CompanyId,
+                                CreateDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now,
+                                ModifiedUser = "System",
+                                Birthday = DateTime.Now
+                            });
+                            createContext.SaveChanges();
 
                         }
                     }
@@ -93,26 +82,23 @@ namespace Bl
                 }
                 else
                 {
-                    
-                        int db_result = repo.Insert(new Customer()
-                        {
-                            Name = registerViewModel.Name,
-                            Email = registerViewModel.Email,
-                            CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                            Password = EncodePassword(registerViewModel.Password),
-                            Repass = EncodePassword(registerViewModel.Repass),
-                            IsActive = false,
-                            IsAdmin = true,
-                            Guid = Guid.NewGuid().ToString(),
-                            CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
-                            CreateDate = DateTime.Now,
-                            ModifiedDate = DateTime.Now,
-                            ModifiedUser = "System",
-                            Birthday = DateTime.Now
-                        });
-                    
 
-
+                    int db_result = repo.Insert(new Customer()
+                    {
+                        Name = registerViewModel.Name,
+                        Email = registerViewModel.Email,
+                        CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                        Password = EncodePassword(registerViewModel.Password),
+                        Repass = EncodePassword(registerViewModel.Repass),
+                        IsActive = false,
+                        IsAdmin = true,
+                        Guid = Guid.NewGuid().ToString(),
+                        CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                        CreateDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUser = "System",
+                        Birthday = DateTime.Now
+                    });
 
                     if (db_result > 0)
                     {
@@ -126,12 +112,10 @@ namespace Bl
                         MailHelper mailHelper = new MailHelper();
                         mailHelper.SendMail(result.Result.Email, body);
                     }
-                
-                    
+
+
                 }
             }
-
-
             return result;
         }
         public void Activation(string guid)
@@ -168,22 +152,15 @@ namespace Bl
                 repo.Update(customer);
             }
         }
+
         public BL_Result<Customer> LogIn(UserViewModel userViewModel)
         {
-
-            Customer customer = repo.Find( x=> x.CompanyId == userViewModel.CompanyId);
+            Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
             if (customer != null)
             {
                 string companyDatabase = customer.CompanyName + customer.Id;
-                var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
-                List<string> alldatabases = new List<string>();
+                string databaseName = Connection.DatabaseConnection(companyDatabase);
 
-                foreach (Microsoft.SqlServer.Management.Smo.Database db in server.Databases)
-                {
-                    alldatabases.Add(db.Name);
-                }
-
-                string databaseName = alldatabases.Find(d => d == companyDatabase);
                 if (databaseName != "")
                 {
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
@@ -209,7 +186,7 @@ namespace Bl
 
         public string EncodePassword(string originalPassword)
         {
-         
+
             Byte[] originalBytes;
             Byte[] encodedBytes;
             MD5 md5;
@@ -222,7 +199,7 @@ namespace Bl
 
 
     }
-   
+
 }
 
 

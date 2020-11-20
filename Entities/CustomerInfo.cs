@@ -18,6 +18,7 @@ namespace Entities
         [Required, MinLength(6)]
         public string Password { get; set; }
         [Required, MinLength(6)]
+       
         public string Repass { get; set; }
         public DateTime Birthday { get; set; }
         public string ProfileImage { get; set; }

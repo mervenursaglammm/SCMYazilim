@@ -15,7 +15,7 @@ namespace Entities.ViewModels
         public string Email { get; set; }
         [Required, MinLength(6)]
         public string Password { get; set; }
-        [Required, MinLength(6)]
+        [Compare("Password", ErrorMessage = "Şifre eşleşmiyor.Tekrar deneyiniz.")]
         public string Repass { get; set; }
         public string CompanyName { get; set; }
         public string CompanyId { get; set; }

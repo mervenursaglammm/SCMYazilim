@@ -13,6 +13,7 @@
     @using (Html.BeginForm("SignUp", "Home", FormMethod.Post))
     {
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+      
         <div class="form-group mb-3">
             <label>Name</label>
             @Html.TextBoxFor(model => model.Name, new { @class = "form-control form-control-lg", name = "name", type = "text" })
@@ -23,7 +24,7 @@
             @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-lg", name = "email", type = "email" })
         </div>
 
-        <div class="form-group mb-3">
+        <div class="form-group mb-0" id="sirketAdi" style="display:none;">
             <label>Company Name</label>
             @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control form-control-lg", name = "companyName", type = "text" })
         </div>
@@ -33,10 +34,13 @@
                 <div class="col-sm-6 mb-3">
                     <label>Password</label>
                     @Html.TextBoxFor(model => model.Password, new { @class = "form-control form-control-lg", name = "pwd", type = "password" })
+                   
+
                 </div>
                 <div class="col-sm-6 mb-3">
                     <label>Password Confirmation</label>
                     @Html.TextBoxFor(model => model.Repass, new { @class = "form-control form-control-lg", name = "pwd_confirm", type = "password" })
+                 
                 </div>
             </div>
         </div>
@@ -48,7 +52,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="checkbox-custom checkbox-default">
-                    <input id="companycheck" name="companycheckbox" type="checkbox" onclick="myFunction()" />
+                    <input id="companycheck" name="companycheckbox" type="checkbox" />
 
                     <label> Kayıtlı Şirket </label>
                 </div>
@@ -80,4 +84,3 @@
         </p>
     }
 </div>
-

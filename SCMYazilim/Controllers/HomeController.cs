@@ -77,7 +77,7 @@ namespace SCMYazilim.Controllers
                 }
                 return View("SignIn");
             }
-            return View();
+            return View(registerViewModel);
         }
 
 

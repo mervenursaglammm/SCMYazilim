@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Dal.Repository
             return Save();
         }
 
+       
         public T Find(Expression<Func<T, bool>> where)
         {
             return createDbContext.Set<T>().Where(where).FirstOrDefault();

@@ -16,6 +16,8 @@ namespace Dal.Repository
             return Save();
         }
 
+      
+
         public T Find(Expression<Func<T, bool>> where)
         {
             return databaseContext.Set<T>().Where(where).FirstOrDefault();
@@ -23,6 +25,7 @@ namespace Dal.Repository
 
         public int Insert(T Obj)
         {
+          
             databaseContext.Set<T>().Add(Obj);
             return Save();
         }
@@ -39,7 +42,10 @@ namespace Dal.Repository
 
         public int Save()
         {
-            return databaseContext.SaveChanges();
+            
+                return databaseContext.SaveChanges();
+            
+            
         }
 
         public int Update(T Obj)

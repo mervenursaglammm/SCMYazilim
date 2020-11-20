@@ -1,14 +1,18 @@
-﻿  
-function myFunction() {
-    var checkBox = document.getElementById("companycheck");
-    // Get the output text
-    var text = document.getElementById("sirketKimligi");
+﻿
+$(document).ready(function () {
+    $("#companycheck").click(function () {
+        if ($(this).is(":checked")) {
+            $("#sirketAdi").show();
+            $("#sirketKimligi").hide();
+        } else {
+            $("#sirketAdi").hide();
+            $("#sirketKimligi").show();
+        }
 
-    // If the checkbox is checked, display the output text
-    if (checkBox.checked == true) {
-        text.style.display = "none";
-    } else {
-        text.style.display = "block";
-    }
-}
+
+    });
+});
+
+
+     
 

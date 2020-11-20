@@ -22,6 +22,7 @@ namespace Bl
         private BL_Result<Customer> result = new BL_Result<Customer>();
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
+        
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             var searchCompanyId = registerViewModel.CompanyId;
@@ -55,11 +56,11 @@ namespace Bl
                             {
                                 Name = registerViewModel.Name,
                                 Email = registerViewModel.Email,
-                                CompanyName = registerViewModel.CompanyId,
+                                CompanyName = registerViewModel.CompanyName,
                                 Password = registerViewModel.Password,
                                 Repass = registerViewModel.Repass,
                                 IsAdmin = false,
-                                CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                                CompanyId = registerViewModel.CompanyId,
                                 CreateDate = DateTime.Now,
                                 ModifiedDate = DateTime.Now,
                                 ModifiedUser = "System",
@@ -155,10 +156,10 @@ namespace Bl
                 repo.Update(customer);
             }
         }
+
         public BL_Result<Customer> LogIn(UserViewModel userViewModel)
         {
-
-            Customer customer = repo.Find( x=> x.CompanyId == userViewModel.CompanyId);
+            Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
             if (customer != null)
             {
                 string companyDatabase = customer.CompanyName + customer.Id;
@@ -192,6 +193,14 @@ namespace Bl
             }
             return result;
         }
+
+        public BL_Result<Customer> CompanyUserList(CustomerInfo customerInfo)
+        {
+            var deneme=customerInfo.CompanyId;
+            // repo_customer.List()
+            return result;
+        }
+
     }
 }
 

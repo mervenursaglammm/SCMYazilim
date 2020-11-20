@@ -39,7 +39,7 @@ namespace SCMYazilim.Controllers
 
             if (ModelState.IsValid)
             {
-                BL_Result<Customer> bl_result = customerManager.LogIn(userViewModel);
+                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
@@ -48,8 +48,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
-                    Session["customer"] = userViewModel.Email;
-                    Session["customerCompanyId"] =userViewModel.CompanyId;
+                   
                     return View("Dashboard");
                 }
             }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Entities
+@{
     Layout = null;
     var customer = Session["customer"];
     var customerCompanyId = Session["customerCompanyId"];
@@ -248,8 +249,12 @@
                             <img src="~/Assetss/img/!happy-face.png" alt="Joseph Doe" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />
                         </figure>
                         <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
-                            <span class="name">@customer</span>
-                            <span class="role">@customerCompanyId </span>
+                            @if (Session["customer"] != null)
+                            {
+                                var deneme = Session["customer"] as CustomerInfo;
+                            <span class="name">@deneme.Email</span>
+                            <span class="role"> @deneme.CompanyId</span>
+                            }
                         </div>
 
                         <i class="fa custom-caret"></i>

@@ -22,6 +22,8 @@ namespace Bl
     public class CustomerManager<T> where T : class
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
+
+        private BL_Result<CustomerInfo> result1 = new BL_Result<CustomerInfo>();
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
@@ -153,7 +155,7 @@ namespace Bl
             }
         }
 
-        public BL_Result<Customer> LogIn(UserViewModel userViewModel)
+        public BL_Result<CustomerInfo> LogIn(UserViewModel userViewModel)
         {
             Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
             if (customer != null)
@@ -166,6 +168,7 @@ namespace Bl
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
                     CustomerInfo _customerInfo = repo_customer.Find(x => x.Email == userViewModel.Email, string.Format(baseConnectionString, databaseName));
+                    result1.Result = _customerInfo;
                     if (_customerInfo == null)
                     {
                         result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
@@ -180,7 +183,7 @@ namespace Bl
             {
                 result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
             }
-            return result;
+            return result1;
         }
 
 

@@ -21,26 +21,6 @@ namespace SCMYazilim.Controllers
     {
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
         private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
-        public string funtion()
-        {
-            var deneme="";
-            return deneme;
-        }
-        /*
-        BL_Result<Customer> bl_result = customerManager.LogIn(userViewModel);
-               if (bl_result.Messages.Count > 0)
-               {
-                   bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-
-                   return View();
-               }
-               else
-               {
-                   Session["customer"] = userViewModel.Email;
-                   Session["customerCompanyId"] =userViewModel.CompanyId;
-                   return View("Dashboard");
-               }
-        */
         // GET: Home
         public ActionResult Index()
         {
@@ -58,7 +38,7 @@ namespace SCMYazilim.Controllers
         {
             if (ModelState.IsValid)
             {
-                BL_Result<Customer> bl_result = customerManager.LogIn(userViewModel);
+                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
@@ -67,10 +47,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
-                    Session["customer"] = userViewModel.Email;
-                    Session["customerCompanyId"] =userViewModel.CompanyId;
-                    var deneme = Session["customerCompanyId"];
-
+                   
                     return View("Dashboard");
                 }
             }
@@ -106,6 +83,24 @@ namespace SCMYazilim.Controllers
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
 
+                // Türkçe karakter çevirme
+                //var text = registerViewModel.Name;
+                //var unaccentedText = String.Join("", text.Normalize(NormalizationForm.FormD)
+                //           .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+                //var t = unaccentedText;
+
+
+                //var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");----
+                //List<string> alldatabases = new List<string>();
+
+                //foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
+                //{
+                //    alldatabases.Add(db.Name);
+                //}
+
+                //List<string> alldatabasesSon = new List<string>();
+                //alldatabasesSon = alldatabases;-----
+
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
@@ -113,7 +108,7 @@ namespace SCMYazilim.Controllers
                 }
                 return View("SignIn");
             }
-            return View();
+            return View(registerViewModel);
         }
 
         public ActionResult Authorization(CustomerInfo customerInfo)

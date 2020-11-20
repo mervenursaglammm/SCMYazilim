@@ -16,5 +16,7 @@ namespace Dal.Repository
         T Find(Expression<Func<T, bool>> where);
         List<T> List();
         List<T> List(Expression<Func<T,bool>> where);
+
+        
     }
 }

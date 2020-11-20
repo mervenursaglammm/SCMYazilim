@@ -17,7 +17,8 @@ namespace Entities
         public string Email { get; set; }
         [Required, MinLength(6)]
         public string Password { get; set; }
-        [Required, MinLength(6)]
+        [Required, MinLength(6), Compare("Password", ErrorMessage = "Şifreler eşleşmedi")]
+    
         public string Repass { get; set; }
         public DateTime Birthday { get; set; }
         public string ProfileImage { get; set; }

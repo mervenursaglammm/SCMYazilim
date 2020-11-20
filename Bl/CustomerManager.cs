@@ -7,10 +7,12 @@ using Entities.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,6 +22,8 @@ namespace Bl
     public class CustomerManager<T> where T : class
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
+
+        private BL_Result<CustomerInfo> result1 = new BL_Result<CustomerInfo>();
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         
@@ -32,15 +36,7 @@ namespace Bl
                 if (customer != null)
                 {
                     string deneme = customer.CompanyName + customer.Id;
-                    var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-8QRCF5A\SQLEXPRESS");
-                    List<string> alldatabases = new List<string>();
-
-                    foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
-                    {
-                        alldatabases.Add(db.Name);
-                    }
-
-                    string databasename = alldatabases.Find(d => d == deneme);
+                    string databasename = Connection.DatabaseConnection(deneme);
                     if (databasename != "")
                     {
                         string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
@@ -52,13 +48,14 @@ namespace Bl
                         }
                         else
                         {
+
                             createContext.CustomerInfos.Add(new CustomerInfo()
                             {
                                 Name = registerViewModel.Name,
                                 Email = registerViewModel.Email,
                                 CompanyName = registerViewModel.CompanyName,
-                                Password = registerViewModel.Password,
-                                Repass = registerViewModel.Repass,
+                                Password = EncodePassword(registerViewModel.Password),
+                                Repass = EncodePassword(registerViewModel.Repass),
                                 IsAdmin = false,
                                 CompanyId = registerViewModel.CompanyId,
                                 CreateDate = DateTime.Now,
@@ -67,6 +64,7 @@ namespace Bl
                                 Birthday = DateTime.Now
                             });
                             createContext.SaveChanges();
+
                         }
                     }
 
@@ -79,7 +77,7 @@ namespace Bl
             else
             {
                 Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-              //  Kullanicinin kayitli olma durumu kontrolu
+                //  Kullanicinin kayitli olma durumu kontrolu
                 if (customer != null)
                 {
                     //result.Messages.Add("Kayıtlı kullanıcı");
@@ -87,13 +85,14 @@ namespace Bl
                 }
                 else
                 {
+
                     int db_result = repo.Insert(new Customer()
                     {
                         Name = registerViewModel.Name,
                         Email = registerViewModel.Email,
                         CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                        Password = registerViewModel.Password,
-                        Repass = registerViewModel.Repass,
+                        Password = EncodePassword(registerViewModel.Password),
+                        Repass = EncodePassword(registerViewModel.Repass),
                         IsActive = false,
                         IsAdmin = true,
                         Guid = Guid.NewGuid().ToString(),
@@ -109,17 +108,17 @@ namespace Bl
                         result.Result = repo.Find(x => x.Email == registerViewModel.Email);
                         //Aktivasyon Maili Gonderme
                         string body = "Hello " + result.Result.Name + ",";
-                        body += "<br /><br />Please click the following link to activate your account";
+                        body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: " + result.Result.CompanyId;
                         body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
                         body += "<br /><br />Thanks";
 
                         MailHelper mailHelper = new MailHelper();
                         mailHelper.SendMail(result.Result.Email, body);
                     }
+
+
                 }
             }
-
-
             return result;
         }
         public void Activation(string guid)
@@ -141,8 +140,8 @@ namespace Bl
                     Name = customer.Name,
                     Email = customer.Email,
                     CompanyName = String.Join("", customer.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                    Password = customer.Password,
-                    Repass = customer.Repass,
+                    Password = EncodePassword(customer.Password),
+                    Repass = EncodePassword(customer.Repass),
                     CompanyId = customer.CompanyId,
                     IsAdmin = true,
                     CreateDate = DateTime.Now,
@@ -156,27 +155,20 @@ namespace Bl
                 repo.Update(customer);
             }
         }
-
         public BL_Result<Customer> LogIn(UserViewModel userViewModel)
         {
             Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
             if (customer != null)
             {
                 string companyDatabase = customer.CompanyName + customer.Id;
-                var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-8QRCF5A\SQLEXPRESS");
-                List<string> alldatabases = new List<string>();
+                string databaseName = Connection.DatabaseConnection(companyDatabase);
 
-                foreach (Microsoft.SqlServer.Management.Smo.Database db in server.Databases)
-                {
-                    alldatabases.Add(db.Name);
-                }
-
-                string databaseName = alldatabases.Find(d => d == companyDatabase);
                 if (databaseName != "")
                 {
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
                     CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
                     CustomerInfo _customerInfo = repo_customer.Find(x => x.Email == userViewModel.Email, string.Format(baseConnectionString, databaseName));
+                    result1.Result = _customerInfo;
                     if (_customerInfo == null)
                     {
                         result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
@@ -191,18 +183,28 @@ namespace Bl
             {
                 result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
             }
-            return result;
+            return result1;
         }
 
-        public BL_Result<Customer> CompanyUserList(CustomerInfo customerInfo)
+
+        public string EncodePassword(string originalPassword)
         {
-            var deneme=customerInfo.CompanyId;
-            // repo_customer.List()
-            return result;
+
+            Byte[] originalBytes;
+            Byte[] encodedBytes;
+            MD5 md5;
+            md5 = new MD5CryptoServiceProvider();
+            originalBytes = ASCIIEncoding.Default.GetBytes(originalPassword);
+            encodedBytes = md5.ComputeHash(originalBytes);
+            return BitConverter.ToString(encodedBytes);
         }
+
+
 
     }
+
 }
+
 
 
 

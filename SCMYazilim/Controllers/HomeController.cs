@@ -32,9 +32,8 @@ namespace SCMYazilim.Controllers
             return View();
         }
 
-        [Route("giris")]
-        [HttpPost]
-        public ActionResult SignIn(UserViewModel userViewModel)
+        [Route("uyelik")]
+        public ActionResult SignUp()
         {
 
             if (ModelState.IsValid)
@@ -55,12 +54,8 @@ namespace SCMYazilim.Controllers
             }
             return View();
         }
-        [Route("uyelik")]
-        public ActionResult SignUp()
-        {
 
-            return View();
-        }
+
         [Route("uyelik")]
         [HttpPost]
         public ActionResult SignUp(RegisterViewModel registerViewModel)
@@ -69,6 +64,23 @@ namespace SCMYazilim.Controllers
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
 
+                // Türkçe karakter çevirme
+                //var text = registerViewModel.Name;
+                //var unaccentedText = String.Join("", text.Normalize(NormalizationForm.FormD)
+                //           .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark));
+                //var t = unaccentedText;
+
+
+                //var s = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");----
+                //List<string> alldatabases = new List<string>();
+
+                //foreach (Microsoft.SqlServer.Management.Smo.Database db in s.Databases)
+                //{
+                //    alldatabases.Add(db.Name);
+                //}
+
+                //List<string> alldatabasesSon = new List<string>();
+                //alldatabasesSon = alldatabases;-----
 
                 if (bl_result.Messages.Count > 0)
                 {
@@ -81,25 +93,29 @@ namespace SCMYazilim.Controllers
         }
 
 
-        //[Route("aktivasyon")]
-        public ActionResult Activation(string id)
+        [Route("giris")]
+        [HttpPost]
+        public ActionResult SignIn(UserViewModel userViewModel)
         {
-            ViewBag.Message = "Invalid Activation code.";
-            if (id != null)
+            if (ModelState.IsValid)
             {
-                customerManager.Activation(id);
-                ViewBag.Message = "Activation successful.";
-                return View();
+                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
+                if (bl_result.Messages.Count > 0)
+                {
+                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                    return View();
+                }
+                else
+                {
+                    Session["customer"] = bl_result.Result;
+                    return View("Dashboard");
+                }
             }
             return View();
         }
 
-        public ActionResult Dashboard()
+        public ActionResult Authorization(CustomerInfo customerInfo)
         {
-            if(Session["customer"] == null)
-            {
-                return View("SignIn");
-            }
             return View();    
         }
 

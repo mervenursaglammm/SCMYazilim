@@ -32,28 +32,6 @@ namespace SCMYazilim.Controllers
             return View();
         }
 
-        [Route("giris")]
-        [HttpPost]
-        public ActionResult SignIn(UserViewModel userViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
-                if (bl_result.Messages.Count > 0)
-                {
-                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-                   
-                    return View();
-                }
-                else
-                {
-                   
-                    return View("Dashboard");
-                }
-            }
-            return View();
-        }
-
         [Route("uyelik")]
         public ActionResult SignUp()
         {
@@ -111,9 +89,30 @@ namespace SCMYazilim.Controllers
             return View(registerViewModel);
         }
 
+
+        [Route("giris")]
+        [HttpPost]
+        public ActionResult SignIn(UserViewModel userViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
+                if (bl_result.Messages.Count > 0)
+                {
+                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
+                    return View();
+                }
+                else
+                {
+                    Session["customer"] = bl_result.Result;
+                    return View("Dashboard");
+                }
+            }
+            return View();
+        }
+
         public ActionResult Authorization(CustomerInfo customerInfo)
         {
-            BL_Result<Customer> bl_result = customerManager.CompanyUserList(customerInfo);
             return View();    
         }
 

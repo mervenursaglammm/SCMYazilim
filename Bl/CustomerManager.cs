@@ -22,7 +22,6 @@ namespace Bl
     public class CustomerManager<T> where T : class
     {
         private BL_Result<Customer> result = new BL_Result<Customer>();
-
         private BL_Result<CustomerInfo> result1 = new BL_Result<CustomerInfo>();
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
@@ -155,7 +154,7 @@ namespace Bl
                 repo.Update(customer);
             }
         }
-        public BL_Result<Customer> LogIn(UserViewModel userViewModel)
+        public BL_Result<CustomerInfo> LogIn(UserViewModel userViewModel)
         {
             Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
             if (customer != null)

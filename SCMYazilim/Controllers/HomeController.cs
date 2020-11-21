@@ -48,6 +48,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
+                    Session["customer"] = bl_result.Result;
                    
                     return View("Dashboard");
                 }

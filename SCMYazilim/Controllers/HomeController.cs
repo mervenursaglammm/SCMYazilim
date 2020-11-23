@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -103,8 +104,23 @@ namespace SCMYazilim.Controllers
             return View();    
         }
 
+        //[HttpPost]
         public ActionResult Profile()
         {
+            //if (Request.Files.Count != 0)
+            //{
+
+            //    for (int i = 0; i < Request.Files.Count; i++)
+            //    {
+            //        var file = Request.Files[i];
+
+            //        var fileName = Path.GetFileName(file.FileName);
+
+            //        var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+            //        file.SaveAs(path);
+            //    }
+
+            //}
             return View();
         }
 

@@ -25,7 +25,8 @@ namespace Bl
         private BL_Result<CustomerInfo> result1 = new BL_Result<CustomerInfo>();
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
-        
+        private static CreateDbContext createContext;
+       // private static string cnn;
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             var searchCompanyId = registerViewModel.CompanyId;
@@ -39,8 +40,10 @@ namespace Bl
                     if (databasename != "")
                     {
                         string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                        CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
+                         createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
                         CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
+                   
+                      
                         if (user != null)
                         {
                             result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
@@ -133,7 +136,7 @@ namespace Bl
                 customer.IsActive = true;
 
                 string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
+                 createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
                 createContext.CustomerInfos.Add(new CustomerInfo()
                 {
                     Name = customer.Name,
@@ -165,22 +168,28 @@ namespace Bl
                 if (databaseName != "")
                 {
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                    CreateDbContext createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
+                     createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
                     CustomerInfo _customerInfo = repo_customer.Find(x => x.Email == userViewModel.Email, string.Format(baseConnectionString, databaseName));
+                   
                     result1.Result = _customerInfo;
+                   
+                 //   cnn = string.Format(baseConnectionString, databaseName);
                     if (_customerInfo == null)
                     {
-                        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                        result1.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                     
+                       
                     }
+                  
                 }
                 else
                 {
-                    result.addError(ErrorMessages.CompanyNotFound, "Şirket bulunamadı.");
+                    result1.addError(ErrorMessages.CompanyNotFound, "Şirket bulunamadı.");
                 }
             }
             else
             {
-                result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                result1.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
             }
             return result1;
         }
@@ -198,7 +207,10 @@ namespace Bl
             return BitConverter.ToString(encodedBytes);
         }
 
-
+        public List <CustomerInfo> GetCustomers()
+        {
+           return createContext.CustomerInfos.ToList();
+        }
 
     }
 

@@ -76,6 +76,18 @@ namespace SCMYazilim.Controllers
             }
             return View(registerViewModel);
         }
+     //   [Route("aktivasyon")]
+        public ActionResult Activation(string id)
+        {
+            ViewBag.Message = "Invalid Activation code.";
+            if (id != null)
+            {
+                customerManager.Activation(id);
+                ViewBag.Message = "Activation successful.";
+                return View();
+            }
+            return View();
+        }
 
 
         [Route("giris")]
@@ -99,9 +111,18 @@ namespace SCMYazilim.Controllers
             return View();
         }
 
-        public ActionResult Authorization(CustomerInfo customerInfo)
+        //public ActionResult Authorization()
+        //{
+        //    //  List<CustomerInfo>customers=
+        //    return View();
+        //}
+        //[HttpPost]
+        public ActionResult Authorization()
         {
-            return View();    
+           List<CustomerInfo>infos = customerManager.GetCustomers();
+
+            
+            return View(infos);    
         }
 
         //[HttpPost]

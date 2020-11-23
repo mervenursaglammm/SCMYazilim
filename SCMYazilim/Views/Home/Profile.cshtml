@@ -250,7 +250,6 @@
                             @if(Session["customer"] != null){
                                 var deneme = Session["customer"] as CustomerInfo;
                                 <span class="name">@deneme.Name</span>
-                                <span class="name">@deneme.ProfileImage</span>
                             }
                         </div>
 
@@ -1466,10 +1465,3 @@
 
 </body>
 </html>
-
-
-<script>
-    function AjaxPost() {
-
-    }
-</script>

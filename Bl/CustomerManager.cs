@@ -170,23 +170,26 @@ namespace Bl
                     string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
                      createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
                     CustomerInfo _customerInfo = repo_customer.Find(x => x.Email == userViewModel.Email, string.Format(baseConnectionString, databaseName));
-                    List<CustomerInfo> customers = createContext.CustomerInfos.ToList();
+                   
                     result1.Result = _customerInfo;
-                    result1.obj = customers;
+                   
                  //   cnn = string.Format(baseConnectionString, databaseName);
                     if (_customerInfo == null)
                     {
-                        result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                        result1.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                     
+                       
                     }
+                  
                 }
                 else
                 {
-                    result.addError(ErrorMessages.CompanyNotFound, "Şirket bulunamadı.");
+                    result1.addError(ErrorMessages.CompanyNotFound, "Şirket bulunamadı.");
                 }
             }
             else
             {
-                result.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
+                result1.addError(ErrorMessages.UserNotFound, "Kullanıcı bulunamadı.");
             }
             return result1;
         }

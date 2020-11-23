@@ -12,5 +12,6 @@ namespace Common.Messages
         UserNotFound = 2,
         UserNotActive = 3,
         CompanyNotFound = 4,
+        CompanyIdNotFound=5,
     }
 }

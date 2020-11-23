@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace SCMYazilim.Controllers
 {
@@ -104,6 +105,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
+                    FormsAuthentication.SetAuthCookie(bl_result.Result.Name, false);
                     Session["customer"] = bl_result.Result;
                     return View("Dashboard");
                 }
@@ -117,6 +119,7 @@ namespace SCMYazilim.Controllers
         //    return View();
         //}
         //[HttpPost]
+        [Authorize]
         public ActionResult Authorization()
         {
            List<CustomerInfo>infos = customerManager.GetCustomers();
@@ -126,6 +129,7 @@ namespace SCMYazilim.Controllers
         }
 
         //[HttpPost]
+        [Authorize]
         public ActionResult Profile()
         {
             //if (Request.Files.Count != 0)
@@ -148,6 +152,7 @@ namespace SCMYazilim.Controllers
         public ActionResult Logout()
         {
             Session.Clear();
+            FormsAuthentication.SignOut();
             return View("SignIn");
         }
     }

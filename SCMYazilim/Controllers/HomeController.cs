@@ -144,20 +144,34 @@ namespace SCMYazilim.Controllers
             {
                 try
                 {
+                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
                     HttpFileCollectionBase files = Request.Files;
 
                     HttpPostedFileBase file = files[0];
-                    string fileName = file.FileName;
 
-                    // create the uploads folder if it doesn't exist
-                    Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
-                    string path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-                    string savedPath = "~/Content/Images/" + fileName;
-                    // save the file
-                    file.SaveAs(path);
+                    if (file != null && (file.ContentType == "image/jpeg" || file.ContentType == "image/jpg" || file.ContentType == "image/png"))
+                    {
+                        string filename = $"{customerInfos.Email}.{file.ContentType.Split('/')[1]}";
+                        Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
+                        string path = Path.Combine(Server.MapPath("~/Content/Images/"), filename);
+                        string extension = Path.GetExtension(path);
+                        string savedPath = "~/Content/Images/" + filename;
+                        // save the file
+                        file.SaveAs(path);
 
-                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
-                    customerManager.UpdateUserImage(customerInfos.Id, savedPath);
+
+                        customerManager.UpdateUserImage(customerInfos.Id, savedPath);
+                        file.SaveAs(Server.MapPath($"~/images/{filename}"));
+                     
+                    }
+                    else
+                    {
+
+                    }
+                  
+                    
+                
+                
                     return Json("File uploaded successfully");
                 }
 

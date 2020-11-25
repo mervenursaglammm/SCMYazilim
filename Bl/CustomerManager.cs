@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -136,7 +137,7 @@ namespace Bl
                 customer.IsActive = true;
 
                 string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                 createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
+                createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
                 createContext.CustomerInfos.Add(new CustomerInfo()
                 {
                     Name = customer.Name,

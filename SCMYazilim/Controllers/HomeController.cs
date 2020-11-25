@@ -21,6 +21,7 @@ namespace SCMYazilim.Controllers
 {
     public class HomeController : Controller
     {
+        
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
         private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
         // GET: Home
@@ -122,44 +123,17 @@ namespace SCMYazilim.Controllers
             return View(infos);
         }
 
-        [Authorize]
+        //[HttpPost]
         public ActionResult Profile()
         {
-            return View();
-        }
-        [HttpPost]
-        [Authorize]
-        public ActionResult Profile(HttpPostedFile file)
-        {
+            //if (Request.Files.Count != 0)
+            //{
 
-          
-            return View("");
-        }
+            //    for (int i = 0; i < Request.Files.Count; i++)
+            //    {
+            //        var file = Request.Files[i];
 
-
-        public JsonResult uploadFile()
-        {
-            // check if the user selected a file to upload
-            if (Request.Files.Count > 0)
-            {
-                try
-                {
-                    HttpFileCollectionBase files = Request.Files;
-
-                    HttpPostedFileBase file = files[0];
-                    string fileName = file.FileName;
-                   
-                    // create the uploads folder if it doesn't exist
-                    Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
-                    string path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-                    string savedPath = "~/Content/Images/" + fileName;
-                    // save the file
-                    file.SaveAs(path);
-
-                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
-                    customerManager.UpdateUserImage(customerInfos.Id, savedPath);
-                    return Json("File uploaded successfully");
-                }
+            //        var fileName = Path.GetFileName(file.FileName);
 
                 catch (Exception e)
                 {

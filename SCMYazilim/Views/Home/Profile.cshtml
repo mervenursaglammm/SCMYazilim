@@ -1091,7 +1091,7 @@
                                         var customerInfos = Session["customer"] as CustomerInfo;
                                         if (customerInfos.ProfileImage == null)
                                         {
-                                            <img src="~/Content/Images/defaultUserImage.jpg" class="rounded img-fluid" id="profile-img-tag" alt="John Doe" >
+                                            <img src="~/Content/Images/defaultUserImage.jpg" class="rounded img-fluid" id="profile-img-tag" alt="John Doe" ac>
                                         }
                                         else
                                         {
@@ -1105,7 +1105,7 @@
                                             <i class="el el-edit"></i>
                                         </label>
                                      
-                                            <input id="file-input" type="file" name="file" onchange="myfunc(this);" accept="" />
+                                            <input id="file-input" type="file" name="file" onchange="myfunc(this);" />
                               
                                         </div>
 
@@ -1633,11 +1633,9 @@
                     data: fileData,
                     success: function (response) {
                        // alert(response);
-                       
+                      
                     }
-                    error: function (message) {
-
-                    }
+                
                 });
             }
            

@@ -20,6 +20,7 @@ namespace SCMYazilim.Controllers
 {
     public class HomeController : Controller
     {
+        
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
         private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
         // GET: Home
@@ -124,25 +125,58 @@ namespace SCMYazilim.Controllers
             
             return View(infos);    
         }
-
-        //[HttpPost]
         public ActionResult Profile()
         {
-            //if (Request.Files.Count != 0)
-            //{
-
-            //    for (int i = 0; i < Request.Files.Count; i++)
-            //    {
-            //        var file = Request.Files[i];
-
-            //        var fileName = Path.GetFileName(file.FileName);
-
-            //        var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-            //        file.SaveAs(path);
-            //    }
-
-            //}
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Profile(HttpPostedFileBase file)
+        {
+            //CustomerInfo customerInfos = Session["customer"]as CustomerInfo;
+            //if (file != null)
+            //{
+            //    string imageName = System.IO.Path.GetFileName(file.FileName);
+            //    string path = System.IO.Path.Combine(Server.MapPath("~/Content/Images"), imageName);
+
+            //    file.SaveAs(path);
+            //    customerManager.UpdateProfilImage(imageName, customerInfos.Id);
+            //}
+
+            return View();
+        }
+
+        public JsonResult uploadFile()
+        {
+            // check if the user selected a file to upload
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    HttpFileCollectionBase files = Request.Files;
+
+                    HttpPostedFileBase file = files[0];
+                    string fileName = file.FileName;
+
+                    // create the uploads folder if it doesn't exist
+                    Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
+                    string path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+                    string savedPath = "~/Content/Images/" + fileName;
+                    // save the file
+                    file.SaveAs(path);
+
+                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
+                    customerManager.UpdateUserImage(fileName, customerInfos.Id);
+                    return Json("File uploaded successfully");
+                }
+
+                catch (Exception e)
+                {
+                    return Json("error" + e.Message);
+                }
+            }
+
+            return Json("no files were selected !");
         }
 
         public ActionResult Logout()

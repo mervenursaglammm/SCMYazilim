@@ -13,5 +13,6 @@ namespace Common.Messages
         UserNotActive = 3,
         CompanyNotFound = 4,
         CompanyIdNotFound=5,
+        PasswordsDoNotMatch=6,
     }
 }

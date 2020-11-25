@@ -44,13 +44,13 @@ namespace SCMYazilim.Controllers
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-                   
+
                     return View();
                 }
                 else
                 {
                     Session["customer"] = bl_result.Result;
-                   
+
                     return View("Dashboard");
                 }
             }
@@ -66,7 +66,7 @@ namespace SCMYazilim.Controllers
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
 
-            
+
 
                 if (bl_result.Messages.Count > 0)
                 {
@@ -77,7 +77,7 @@ namespace SCMYazilim.Controllers
             }
             return View(registerViewModel);
         }
-     //   [Route("aktivasyon")]
+        //   [Route("aktivasyon")]
         public ActionResult Activation(string id)
         {
             ViewBag.Message = "Invalid Activation code.";
@@ -113,47 +113,69 @@ namespace SCMYazilim.Controllers
             return View();
         }
 
-        //public ActionResult Authorization()
-        //{
-        //    //  List<CustomerInfo>customers=
-        //    return View();
-        //}
-        //[HttpPost]
         [Authorize]
         public ActionResult Authorization()
         {
-           List<CustomerInfo>infos = customerManager.GetCustomers();
+            List<CustomerInfo> infos = customerManager.GetCustomers();
 
-            
-            return View(infos);    
+
+            return View(infos);
         }
 
-        //[HttpPost]
         [Authorize]
         public ActionResult Profile()
         {
-            //if (Request.Files.Count != 0)
-            //{
-
-            //    for (int i = 0; i < Request.Files.Count; i++)
-            //    {
-            //        var file = Request.Files[i];
-
-            //        var fileName = Path.GetFileName(file.FileName);
-
-            //        var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-            //        file.SaveAs(path);
-            //    }
-
-            //}
             return View();
         }
+        [HttpPost]
+        [Authorize]
+        public ActionResult Profile(HttpPostedFile file)
+        {
+
+          
+            return View("");
+        }
+
+
+        public JsonResult uploadFile()
+        {
+            // check if the user selected a file to upload
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    HttpFileCollectionBase files = Request.Files;
+
+                    HttpPostedFileBase file = files[0];
+                    string fileName = file.FileName;
+                   
+                    // create the uploads folder if it doesn't exist
+                    Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
+                    string path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+                    string savedPath = "~/Content/Images/" + fileName;
+                    // save the file
+                    file.SaveAs(path);
+
+                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
+                    customerManager.UpdateUserImage(customerInfos.Id, savedPath);
+                    return Json("File uploaded successfully");
+                }
+
+                catch (Exception e)
+                {
+                    return Json("error" + e.Message);
+                }
+            }
+
+            return Json("no files were selected !");
+        }
+
 
         public ActionResult Logout()
-        {
-            Session.Clear();
-            FormsAuthentication.SignOut();
-            return View("SignIn");
+            {
+                Session.Clear();
+                FormsAuthentication.SignOut();
+                return View("SignIn");
+            }
         }
     }
-}

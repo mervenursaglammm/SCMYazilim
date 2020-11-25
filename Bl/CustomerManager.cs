@@ -212,6 +212,13 @@ namespace Bl
            return createContext.CustomerInfos.ToList();
         }
 
+        public void UpdateUserImage(int id, string contentUrl)
+        {
+            var data=createContext.CustomerInfos.FirstOrDefault(x => x.Id == id);
+            data.ProfileImage = contentUrl;
+            createContext.SaveChanges();
+        }
+
     }
 
 }

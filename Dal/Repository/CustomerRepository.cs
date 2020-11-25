@@ -52,6 +52,10 @@ namespace Dal.Repository
 
         public int Update(T Obj)
         {
+
+           // var data = createDbContext.Set<T>().FirstOrDefault(x => x.Id == Id);
+
+           
             return Save();
         }
     }

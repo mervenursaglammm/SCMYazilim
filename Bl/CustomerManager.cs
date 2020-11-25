@@ -213,16 +213,12 @@ namespace Bl
            return createContext.CustomerInfos.ToList();
         }
 
-        public string UpdateProfilImage(string imageName, int id) {
-            createContext.Database.ExecuteSqlCommand("Update CustomerInfoes set ProfileImage='~/Content/Images/" +imageName+"' where Id='"+id+"' ");
-            
-            return "";
+        public void UpdateUserImage(int id, string contentUrl)
+        {
+            var data=createContext.CustomerInfos.FirstOrDefault(x => x.Id == id);
+            data.ProfileImage = contentUrl;
+            createContext.SaveChanges();
         }
-        
-        /*public string UpdateUserImage(string imageName, int id) {
-            createContext.Database.ExecuteSqlCommand("Update CustomerInfoes set ProfileImage='~/Content/Images/" +imageName+"' where Id='"+id+"' ");
-            return "";
-        } */
 
     }
 

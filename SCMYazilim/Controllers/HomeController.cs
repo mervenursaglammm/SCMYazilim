@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace SCMYazilim.Controllers
 {
@@ -44,13 +45,13 @@ namespace SCMYazilim.Controllers
                 if (bl_result.Messages.Count > 0)
                 {
                     bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-                   
+
                     return View();
                 }
                 else
                 {
                     Session["customer"] = bl_result.Result;
-                   
+
                     return View("Dashboard");
                 }
             }
@@ -66,7 +67,7 @@ namespace SCMYazilim.Controllers
             {
                 BL_Result<Customer> bl_result = customerManager.Register(registerViewModel);
 
-            
+
 
                 if (bl_result.Messages.Count > 0)
                 {
@@ -77,7 +78,7 @@ namespace SCMYazilim.Controllers
             }
             return View(registerViewModel);
         }
-     //   [Route("aktivasyon")]
+        //   [Route("aktivasyon")]
         public ActionResult Activation(string id)
         {
             ViewBag.Message = "Invalid Activation code.";
@@ -105,6 +106,7 @@ namespace SCMYazilim.Controllers
                 }
                 else
                 {
+                    FormsAuthentication.SetAuthCookie(bl_result.Result.Name, false);
                     Session["customer"] = bl_result.Result;
                     return View("Dashboard");
                 }
@@ -112,63 +114,26 @@ namespace SCMYazilim.Controllers
             return View();
         }
 
-        //public ActionResult Authorization()
-        //{
-        //    //  List<CustomerInfo>customers=
-        //    return View();
-        //}
-        //[HttpPost]
+        [Authorize]
         public ActionResult Authorization()
         {
-           List<CustomerInfo>infos = customerManager.GetCustomers();
+            List<CustomerInfo> infos = customerManager.GetCustomers();
 
-            
-            return View(infos);    
+
+            return View(infos);
         }
+
+        //[HttpPost]
         public ActionResult Profile()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Profile(HttpPostedFileBase file)
-        {
-            //CustomerInfo customerInfos = Session["customer"]as CustomerInfo;
-            //if (file != null)
+            //if (Request.Files.Count != 0)
             //{
-            //    string imageName = System.IO.Path.GetFileName(file.FileName);
-            //    string path = System.IO.Path.Combine(Server.MapPath("~/Content/Images"), imageName);
 
-            //    file.SaveAs(path);
-            //    customerManager.UpdateProfilImage(imageName, customerInfos.Id);
-            //}
+            //    for (int i = 0; i < Request.Files.Count; i++)
+            //    {
+            //        var file = Request.Files[i];
 
-            return View();
-        }
-
-        public JsonResult uploadFile()
-        {
-            // check if the user selected a file to upload
-            if (Request.Files.Count > 0)
-            {
-                try
-                {
-                    HttpFileCollectionBase files = Request.Files;
-
-                    HttpPostedFileBase file = files[0];
-                    string fileName = file.FileName;
-
-                    // create the uploads folder if it doesn't exist
-                    Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
-                    string path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-                    string savedPath = "~/Content/Images/" + fileName;
-                    // save the file
-                    file.SaveAs(path);
-
-                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
-                    customerManager.UpdateUserImage(fileName, customerInfos.Id);
-                    return Json("File uploaded successfully");
-                }
+            //        var fileName = Path.GetFileName(file.FileName);
 
                 catch (Exception e)
                 {
@@ -179,10 +144,12 @@ namespace SCMYazilim.Controllers
             return Json("no files were selected !");
         }
 
+
         public ActionResult Logout()
-        {
-            Session.Clear();
-            return View("SignIn");
+            {
+                Session.Clear();
+                FormsAuthentication.SignOut();
+                return View("SignIn");
+            }
         }
     }
-}

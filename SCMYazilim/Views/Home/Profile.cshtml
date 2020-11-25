@@ -1091,7 +1091,7 @@
                                         var customerInfos = Session["customer"] as CustomerInfo;
                                         if (customerInfos.ProfileImage == null)
                                         {
-                                            <img src="~/Content/Images/defaultUserImage.jpg" class="rounded img-fluid" id="profile-img-tag" alt="John Doe">
+                                            <img src="~/Content/Images/defaultUserImage.jpg" class="rounded img-fluid" id="profile-img-tag" alt="John Doe" >
                                         }
                                         else
                                         {
@@ -1104,14 +1104,8 @@
                                         <label for="file-input">
                                             <i class="el el-edit"></i>
                                         </label>
-
-                                        <input id="file-input" type="file" name="file" onchange="myfunc(this);" />
-
+                                        <input id="file-input" type="file" name="ProfileImage" />
                                     </div>
-
-
-
-
                                     <div class="thumb-info-title">
                                         <span class="thumb-info-inner">John Doe</span>
                                         <span class="thumb-info-type">CEO</span>
@@ -1599,49 +1593,32 @@
 
 
 <script>
-    function myfunc(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    $("#file-input").change(function () {
+        var data = new FormData();
+        var totalFiles = document.getElementById("file-input").files.length;
 
-            reader.onload = function (e) {
-                $('#profile-img-tag').attr('src', e.target.result);
-
-            }
-            reader.readAsDataURL(input.files[0]);
-
-            var name = event.target.files[0].name;
-            //  alert(name);
-
-            if (window.FormData == undefined)
-                alert("Error: FormData is undefined");
-
-            else {
-                var fileUpload = $("#file-input").get(0);
-                var files = fileUpload.files;
-
-                var fileData = new FormData();
-
-                fileData.append(files[0].name, files[0]);
-
-                $.ajax({
-                    url: '/Home/uploadFile',
-                    type: 'post',
-                    datatype: 'json',
-                    contentType: false,
-                    processData: false,
-                    async: false,
-                    data: fileData,
-                    success: function (response) {
-                        // alert(response);
-                    }
-                });
-            }
-
+        for (var i = 0; i < totalFiles; i++) {
+            var file = document.getElementById("imageUploadForm").files[i];
+            formData.append("imageUploadForm", file);
         }
-
-    }
-    //var formdata = new FormData($('#myfrm').get(0));
-    //alert(formData)
-
+        $.ajax({
+            type: "POST",
+            url: '/Home/Upload',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false
+            //success: function(response) {
+            //    alert('succes!!');
+            //},
+            //error: function(error) {
+            //    alert("errror");
+            //}
+        }).done(function () {
+            alert('success');
+        }.fail(function (xhr, status, errorThrown) {
+            alert('fail');
+        };
+    });
 
 </script>

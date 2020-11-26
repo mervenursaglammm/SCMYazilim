@@ -154,14 +154,11 @@ namespace SCMYazilim.Controllers
                         string filename = $"{customerInfos.Email}.{file.ContentType.Split('/')[1]}";
                         Directory.CreateDirectory(Server.MapPath("~/Content/Images/"));
                         string path = Path.Combine(Server.MapPath("~/Content/Images/"), filename);
-                        string extension = Path.GetExtension(path);
                         string savedPath = "~/Content/Images/" + filename;
                         // save the file
                         file.SaveAs(path);
-
-
                         customerManager.UpdateUserImage(customerInfos.Id, savedPath);
-                        file.SaveAs(Server.MapPath($"~/images/{filename}"));
+                      
                      
                     }
                     else

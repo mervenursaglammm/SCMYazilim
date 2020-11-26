@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Entities.CustomerInfo>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 
@@ -8,7 +9,7 @@
 
 <section role="main" class="content-body">
     <header class="page-header">
-        <h2>Responsive Tables</h2>
+        <h2>Kullanıcı Yetkilendirme</h2>
 
         <div class="right-wrapper text-right">
             <ol class="breadcrumbs">
@@ -26,9 +27,6 @@
     </header>
 
     <!-- start: page -->
-    <div class="alert alert-info">
-        Resize the browser to see the responsiveness in action.
-    </div>
 
     <div class="row">
         <div class="col">
@@ -39,150 +37,52 @@
                         <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                     </div>
 
-                    <h2 class="card-title">Authorization</h2>
+                    <h2 class="card-title">Modül Seç</h2>
                 </header>
                 <div class="card-body">
                     <table class="table table-responsive-lg table-bordered table-striped table-sm mb-0">
                         <thead>
                             <tr>
-                                <th> </th>
+                                <th> Modül </th>
+                                <th> Fiyat </th>
                                 @foreach (var item in Model)
-
                                 {
                                     <th class="text-right">@item.Name.</th>
                                 }
-                              
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-
-                                <td>AUSTRALIAN AGRICULTURAL COMPANY LIMITED.</td>
-                                <td class="text-right">$1.38</td>
-                                <td class="text-right">-0.01</td>
-                                <td class="text-right">-0.36%</td>
-                                <td class="text-right">$1.39</td>
-                                <td class="text-right">$1.39</td>
-                                <td class="text-right">$1.38</td>
-                                <td class="text-right">9,395</td>
+                            <tr id="deneme" no="1">
+                                <div id="checkboxlist">
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> <div><input type="checkbox" value="11" class="chk"> </div> </td>
+                                    <td> <div><input type="checkbox" value="12" class="chk"> </div> </td>
+                                    <div>
+                                        <input type="button" value="Hesapla" id="Hesapla">
+                                        <!-- <input type="button" value="Örnek iki" id="buttonParent"> -->
+                                    </div>
+                                </div>
                             </tr>
-                            <tr>
-
-                                <td>ARDENT LEISURE GROUP</td>
-                                <td class="text-right">$1.15</td>
-                                <td class="text-right">  +0.02</td>
-                                <td class="text-right">1.32%</td>
-                                <td class="text-right">$1.14</td>
-                                <td class="text-right">$1.15</td>
-                                <td class="text-right">$1.13</td>
-                                <td class="text-right">56,431</td>
-                            </tr>
-                            <tr>
-
-                                <td>AUSENCO LIMITED</td>
-                                <td class="text-right">$4.00</td>
-                                <td class="text-right">-0.04</td>
-                                <td class="text-right">-0.99%</td>
-                                <td class="text-right">$4.01</td>
-                                <td class="text-right">$4.05</td>
-                                <td class="text-right">$4.00</td>
-                                <td class="text-right">90,641</td>
-                            </tr>
-                            <tr>
-
-                                <td>ADELAIDE BRIGHTON LIMITED</td>
-                                <td class="text-right">$3.00</td>
-                                <td class="text-right">  +0.06</td>
-                                <td class="text-right">2.04%</td>
-                                <td class="text-right">$2.98</td>
-                                <td class="text-right">$3.00</td>
-                                <td class="text-right">$2.96</td>
-                                <td class="text-right">862,518</td>
-                            </tr>
-                            <tr>
-
-                                <td>ABACUS PROPERTY GROUP</td>
-                                <td class="text-right">$1.91</td>
-                                <td class="text-right">0.00</td>
-                                <td class="text-right">0.00%</td>
-                                <td class="text-right">$1.92</td>
-                                <td class="text-right">$1.93</td>
-                                <td class="text-right">$1.90</td>
-                                <td class="text-right">595,701</td>
-                            </tr>
-                            <tr>
-
-                                <td>ADITYA BIRLA MINERALS LIMITED</td>
-                                <td class="text-right">$0.77</td>
-                                <td class="text-right">  +0.02</td>
-                                <td class="text-right">2.00%</td>
-                                <td class="text-right">$0.76</td>
-                                <td class="text-right">$0.77</td>
-                                <td class="text-right">$0.76</td>
-                                <td class="text-right">54,567</td>
-                            </tr>
-                            <tr>
-
-                                <td>ACRUX LIMITED</td>
-                                <td class="text-right">$3.71</td>
-                                <td class="text-right">  +0.01</td>
-                                <td class="text-right">0.14%</td>
-                                <td class="text-right">$3.70</td>
-                                <td class="text-right">$3.72</td>
-                                <td class="text-right">$3.68</td>
-                                <td class="text-right">191,373</td>
-                            </tr>
-                            <tr>
-
-                                <td>ADAMUS RESOURCES LIMITED</td>
-                                <td class="text-right">$0.72</td>
-                                <td class="text-right">0.00</td>
-                                <td class="text-right">0.00%</td>
-                                <td class="text-right">$0.73</td>
-                                <td class="text-right">$0.74</td>
-                                <td class="text-right">$0.72</td>
-                                <td class="text-right">8,602,291</td>
-                            </tr>
-                            <tr>
-
-                                <td>ANGLOGOLD ASHANTI LIMITED</td>
-                                <td class="text-right">$7.81</td>
-                                <td class="text-right">-0.22</td>
-                                <td class="text-right">-2.74%</td>
-                                <td class="text-right">$7.82</td>
-                                <td class="text-right">$7.82</td>
-                                <td class="text-right">$7.81</td>
-                                <td class="text-right">148</td>
-                            </tr>
-                            <tr>
-
-                                <td>AGL ENERGY LIMITED</td>
-                                <td class="text-right">$13.82</td>
-                                <td class="text-right">  +0.02</td>
-                                <td class="text-right">0.14%</td>
-                                <td class="text-right">$13.83</td>
-                                <td class="text-right">$13.83</td>
-                                <td class="text-right">$13.67</td>
-                                <td class="text-right">846,403</td>
-                            </tr>
-                            <tr>
-
-                                <td>ATLAS IRON LIMITED</td>
-                                <td class="text-right">$3.17</td>
-                                <td class="text-right">-0.02</td>
-                                <td class="text-right">-0.47%</td>
-                                <td class="text-right">$3.11</td>
-                                <td class="text-right">$3.22</td>
-                                <td class="text-right">$3.10</td>
-                                <td class="text-right">5,416,303</td>
-                            </tr>
+                            
+                            
                         </tbody>
                     </table>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <div id="tutar" class="tutar">
+                                    Tutar:
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
                 </div>
             </section>
         </div>
     </div>
-
 
 </section>
 

@@ -10,7 +10,7 @@ namespace Dal.Repository
     {
         public static string DatabaseConnection(string connectionString)
         {
-            var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
+            var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-8QRCF5A\SQLEXPRESS");
             List<string> alldatabases = new List<string>();
 
             foreach (Microsoft.SqlServer.Management.Smo.Database db in server.Databases)

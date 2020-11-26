@@ -51,23 +51,21 @@ namespace Bl
                         }
                         else
                         {
-
-                            createContext.CustomerInfos.Add(new CustomerInfo()
-                            {
-                                Name = registerViewModel.Name,
-                                Email = registerViewModel.Email,
-                                CompanyName = registerViewModel.CompanyName,
-                                Password = EncodePassword(registerViewModel.Password),
-                                Repass = EncodePassword(registerViewModel.Repass),
-                                IsAdmin = false,
-                                CompanyId = registerViewModel.CompanyId,
-                                CreateDate = DateTime.Now,
-                                ModifiedDate = DateTime.Now,
-                                ModifiedUser = "System",
-                                Birthday = DateTime.Now
-                            });
-                            createContext.SaveChanges();
-
+                                createContext.CustomerInfos.Add(new CustomerInfo()
+                                {
+                                    Name = registerViewModel.Name,
+                                    Email = registerViewModel.Email,
+                                    CompanyName = registerViewModel.CompanyName,
+                                    Password = EncodePassword(registerViewModel.Password),
+                                    Repass = EncodePassword(registerViewModel.Repass),
+                                    IsAdmin = false,
+                                    CompanyId = registerViewModel.CompanyId,
+                                    CreateDate = DateTime.Now,
+                                    ModifiedDate = DateTime.Now,
+                                    ModifiedUser = "System",
+                                    Birthday = DateTime.Now
+                                });
+                                createContext.SaveChanges();
                         }
                     }
 
@@ -88,37 +86,42 @@ namespace Bl
                 }
                 else
                 {
-
-                    int db_result = repo.Insert(new Customer()
+                    if (registerViewModel.Password == registerViewModel.Repass)
                     {
-                        Name = registerViewModel.Name,
-                        Email = registerViewModel.Email,
-                        CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                        Password = EncodePassword(registerViewModel.Password),
-                        Repass = EncodePassword(registerViewModel.Repass),
-                        IsActive = false,
-                        IsAdmin = true,
-                        Guid = Guid.NewGuid().ToString(),
-                        CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
-                        CreateDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now,
-                        ModifiedUser = "System",
-                        Birthday = DateTime.Now
-                    });
+                        int db_result = repo.Insert(new Customer()
+                        {
+                            Name = registerViewModel.Name,
+                            Email = registerViewModel.Email,
+                            CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                            Password = EncodePassword(registerViewModel.Password),
+                            Repass = EncodePassword(registerViewModel.Repass),
+                            IsActive = false,
+                            IsAdmin = true,
+                            Guid = Guid.NewGuid().ToString(),
+                            CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                            CreateDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                            ModifiedUser = "System",
+                            Birthday = DateTime.Now
+                        });
 
-                    if (db_result > 0)
-                    {
-                        result.Result = repo.Find(x => x.Email == registerViewModel.Email);
-                        //Aktivasyon Maili Gonderme
-                        string body = "Hello " + result.Result.Name + ",";
-                        body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: " + result.Result.CompanyId;
-                        body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
-                        body += "<br /><br />Thanks";
+                        if (db_result > 0)
+                        {
+                            result.Result = repo.Find(x => x.Email == registerViewModel.Email);
+                            //Aktivasyon Maili Gonderme
+                            string body = "Hello " + result.Result.Name + ",";
+                            body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: " + result.Result.CompanyId;
+                            body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
+                            body += "<br /><br />Thanks";
 
-                        MailHelper mailHelper = new MailHelper();
-                        mailHelper.SendMail(result.Result.Email, body);
+                            MailHelper mailHelper = new MailHelper();
+                            mailHelper.SendMail(result.Result.Email, body);
+                        }
                     }
-
+                    else
+                    {
+                        result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                    }
 
                 }
             }

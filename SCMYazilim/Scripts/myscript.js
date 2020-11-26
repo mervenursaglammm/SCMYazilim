@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    var deneme;
     function getValueUsingClass() {
         var chkArray = [];
         / * Bir sınıfın 'chk' ekli tüm onay kutularını ara ve seçili olup olmadıklarını kontrol edin * /
@@ -31,12 +30,12 @@
     / * her onay kutusuna ekli olan sinif temel alinarak onay kutusu degerleri aliniyor * /
     $("#Hesapla").click(function () {
         getValueUsingClass();
-        var deneme = 0;
+        var topla = 0;
 
         $(".chk:checked").each(function () {
-            deneme += parseFloat($(this).attr("no"));
+            topla += parseFloat($(this).attr("no"));
         });
-        $("#tutar1").html(deneme);
+        $("#tutar1").html(topla);
     });
 
 });

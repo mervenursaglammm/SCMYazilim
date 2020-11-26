@@ -30,7 +30,7 @@
     / * her onay kutusuna ekli olan sinif temel alinarak onay kutusu degerleri aliniyor * /
     $("#Hesapla").click(function () {
         getValueUsingClass();
-        var deneme = 0;
+        var topla = 0;
         
         var today = new Date();
         var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -40,9 +40,9 @@
         var tarihFarki = lastDayOfMonth.getDate() - d.getDate() + 1;
         //alert(tarihFarki);
         $(".chk:checked").each(function () {
-            topla += parseFloat($(this).attr("no"));
+           topla += parseFloat($(this).attr("no"));
         });
-        var tutar = deneme * tarihFarki;
+        var tutar = topla * tarihFarki;
         $("#tutar1").html(tutar + "₺");
         var aciklama ="("+ d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " tarihinden " + lastDayOfMonth.getDate() + "." + (lastDayOfMonth.getMonth() + 1) + "." + lastDayOfMonth.getFullYear() + " tarihine kadar tutarı " + tutar + "₺'dir.)";
         $("#aciklama").html(aciklama);

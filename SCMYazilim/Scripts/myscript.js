@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    var deneme;
     function getValueUsingClass() {
         var chkArray = [];
         / * Bir sınıfın 'chk' ekli tüm onay kutularını ara ve seçili olup olmadıklarını kontrol edin * /
@@ -41,7 +40,7 @@
         var tarihFarki = lastDayOfMonth.getDate() - d.getDate() + 1;
         //alert(tarihFarki);
         $(".chk:checked").each(function () {
-            deneme += parseFloat($(this).attr("no"));
+            topla += parseFloat($(this).attr("no"));
         });
         var tutar = deneme * tarihFarki;
         $("#tutar1").html(tutar + "₺");

@@ -13,7 +13,6 @@ namespace Entities.ViewModels
         public string Email { get; set; }
         [Required, MinLength(6)]
         public string Password { get; set; }
-        public string CompanyId { get; set; }
        
     }
 }

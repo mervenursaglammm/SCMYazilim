@@ -63,7 +63,6 @@
                     <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
                 </div>
             </div>
-
             <!-- start: search & user box -->
             <div class="header-right">
 
@@ -239,8 +238,10 @@
                     </li>
                 </ul>
 
-                <span class="separator"></span>
 
+                <span class="separator"> </span>
+                <div id="remainder" class="userbox"> bakiye </div>
+                <span class="separator"> </span>
                 <div id="userbox" class="userbox">
                     <a href="#" data-toggle="dropdown">
                         <figure class="profile-picture">
@@ -250,7 +251,7 @@
                             @if (Session["customer"] != null)
                             {
                                 var deneme = Session["customer"] as CustomerInfo;
-                                <span class="name">@deneme.Email</span>
+                                <span class="name"> @deneme.Email</span>
                                 <span class="role"> @deneme.CompanyId</span>
                             }
                         </div>

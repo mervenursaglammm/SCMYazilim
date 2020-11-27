@@ -31,9 +31,35 @@ namespace Bl
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             var searchCompanyId = registerViewModel.CompanyId;
+            //Kullanici kayit olmaya calisiyor.
             if (searchCompanyId != null)
             {
+                if (registerViewModel.Password == registerViewModel.Repass)
+                {
+
+                    int db_result = repo.Insert(new Customer()
+                    {
+                        Name = registerViewModel.Name,
+                        Email = registerViewModel.Email,
+                        Password = EncodePassword(registerViewModel.Password),
+                        Repass = EncodePassword(registerViewModel.Repass),
+                        IsActive = true,
+                        IsAdmin = false,
+                        Guid = "merve",
+                        CompanyId = registerViewModel.CompanyId,
+                        CreateDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedUser = "System",
+                        Birthday = DateTime.Now
+                    }) ;
+                }
+                else
+                {
+                    result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                }
+
                 Customer customer = repo.Find(x => x.CompanyId == searchCompanyId);
+
                 if (customer != null)
                 {
                     string deneme = customer.CompanyName + customer.Id;
@@ -41,7 +67,7 @@ namespace Bl
                     if (databasename != "")
                     {
                         string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                         createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
+                        createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
                         CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
                    
                       
@@ -78,7 +104,7 @@ namespace Bl
             else
             {
                 Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-                //  Kullanicinin kayitli olma durumu kontrolu
+                //  Adminin daha once kayitli olma durumu kontrolu
                 if (customer != null)
                 {
                     //result.Messages.Add("Kayıtlı kullanıcı");
@@ -88,6 +114,7 @@ namespace Bl
                 {
                     if (registerViewModel.Password == registerViewModel.Repass)
                     {
+                        //admin kaydi yapiliyor.
                         int db_result = repo.Insert(new Customer()
                         {
                             Name = registerViewModel.Name,
@@ -106,7 +133,7 @@ namespace Bl
                         });
 
                         if (db_result > 0)
-                        {
+                        {  //admin icin aktivasyon maili
                             result.Result = repo.Find(x => x.Email == registerViewModel.Email);
                             //Aktivasyon Maili Gonderme
                             string body = "Hello " + result.Result.Name + ",";
@@ -163,10 +190,12 @@ namespace Bl
         }
         public BL_Result<CustomerInfo> LogIn(UserViewModel userViewModel)
         {
-            Customer customer = repo.Find(x => x.CompanyId == userViewModel.CompanyId);
+            Customer customer = repo.Find( x => x.Email == userViewModel.Email);
+            string CompanyName = repo.Find(x => x.CompanyId == customer.CompanyId && x.IsAdmin == true).CompanyName;
+            int Id = repo.Find(x => x.CompanyId == customer.CompanyId && x.IsAdmin == true).Id;
             if (customer != null)
             {
-                string companyDatabase = customer.CompanyName + customer.Id;
+                string companyDatabase = CompanyName + Id;
                 string databaseName = Connection.DatabaseConnection(companyDatabase);
 
                 if (databaseName != "")

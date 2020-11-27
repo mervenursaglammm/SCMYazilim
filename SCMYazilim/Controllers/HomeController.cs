@@ -22,7 +22,8 @@ namespace SCMYazilim.Controllers
     public class HomeController : Controller
     {
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
-        private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
+        private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>(); 
+
         // GET: Home
         public ActionResult Index()
         {
@@ -117,7 +118,7 @@ namespace SCMYazilim.Controllers
         public ActionResult Authorization()
         {
             List<CustomerInfo> infos = customerManager.GetCustomers();
-
+            //List<Remainder> remainder = Payment.;
 
             return View(infos);
         }

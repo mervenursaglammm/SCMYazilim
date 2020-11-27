@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Management.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,12 @@ namespace Dal.Repository
     {
         public static string DatabaseConnection(string connectionString)
         {
-            var server = new Microsoft.SqlServer.Management.Smo.Server(@"DESKTOP-T7SEF7T\SQLEXPRESS");
+            //Server = 2.56.154.97; Database = myDataBase; User Id = sa; Password = @acm ^ G6U
+            string ServerName ="2.56.154.97";
+            string UserName = "sa";
+            string Password = "@acm^G6U";
+            ServerConnection cn = new ServerConnection(ServerName, UserName, Password);
+            var server = new Microsoft.SqlServer.Management.Smo.Server(cn);
             List<string> alldatabases = new List<string>();
 
             foreach (Microsoft.SqlServer.Management.Smo.Database db in server.Databases)

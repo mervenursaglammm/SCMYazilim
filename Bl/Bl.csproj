@@ -175,6 +175,7 @@
   <ItemGroup>
     <Compile Include="BL_Result.cs" />
     <Compile Include="CustomerManager.cs" />
+    <Compile Include="Payment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

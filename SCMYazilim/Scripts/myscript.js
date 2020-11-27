@@ -11,7 +11,7 @@
         selected = chkArray.join(',') + ",";
 
         if (selected.length > 1) {
-            alert("Seçtiniz " + selected);
+          // alert("Seçtiniz " + selected);
         } else {
             alert("Lütfen onay kutusundan en az bir tanesini seçiniz.");
         }
@@ -31,11 +31,26 @@
     $("#Hesapla").click(function () {
         getValueUsingClass();
         var topla = 0;
-
+        
+        var today = new Date();
+        var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        //alert(lastDayOfMonth.getDate());
+        var d = new Date();
+        //alert(d.getDate());
+        var tarihFarki = lastDayOfMonth.getDate() - d.getDate() + 1;
+        //alert(tarihFarki);
         $(".chk:checked").each(function () {
-            topla += parseFloat($(this).attr("no"));
+           topla += parseFloat($(this).attr("no"));
         });
-        $("#tutar1").html(topla);
+        var tutar = topla * tarihFarki;
+        $("#tutar1").html(tutar + "₺");
+        var aciklama ="("+ d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " tarihinden " + lastDayOfMonth.getDate() + "." + (lastDayOfMonth.getMonth() + 1) + "." + lastDayOfMonth.getFullYear() + " tarihine kadar tutarı " + tutar + "₺'dir.)";
+        $("#aciklama").html(aciklama);
+       // alert(d.getMonth());
+
+       
+
+       
     });
 
 });

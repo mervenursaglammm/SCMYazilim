@@ -12,15 +12,15 @@ namespace Dal
     {
         public CreateDbContext()
         {
-            Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
+            Database.SetInitializer<CreateDbContext>(new DropCreateDatabaseAlways<CreateDbContext>());
         }
         public CreateDbContext(string connectionString) : base(connectionString)
         {
-            Database.SetInitializer<CreateDbContext>(new CreateDatabaseIfNotExists<CreateDbContext>());
+            Database.SetInitializer<CreateDbContext>(new DropCreateDatabaseAlways<CreateDbContext>());
         }
         public DbSet<CustomerInfo> CustomerInfos { get; set; }
 
-
+        public DbSet<Remainder> Remainders { get; set; }
 
     }
 }

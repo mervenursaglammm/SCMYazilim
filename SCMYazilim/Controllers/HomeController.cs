@@ -117,7 +117,7 @@ namespace SCMYazilim.Controllers
         public ActionResult Authorization()
         {
             List<CustomerInfo> infos = customerManager.GetCustomers();
-
+            
 
             return View(infos);
         }

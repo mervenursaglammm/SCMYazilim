@@ -174,6 +174,10 @@
   <ItemGroup>
     <Compile Include="CreateDbContext.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="Migrations\202011270824056_MyMigration.cs" />
+    <Compile Include="Migrations\202011270824056_MyMigration.designer.cs">
+      <DependentUpon>202011270824056_MyMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Connection.cs" />
@@ -190,6 +194,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202011270824056_MyMigration.resx">
+      <DependentUpon>202011270824056_MyMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

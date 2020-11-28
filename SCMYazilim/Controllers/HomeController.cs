@@ -22,8 +22,9 @@ namespace SCMYazilim.Controllers
     public class HomeController : Controller
     {
         private CustomerManager<Customer> customerManager = new CustomerManager<Customer>();
-        private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>(); 
-
+        private CustomerRepository<Customer> customerRepo = new CustomerRepository<Customer>();
+        private Payment<Remainder> payment = new Payment<Remainder>();
+        Remainder remainder= new Remainder();
         // GET: Home
         public ActionResult Index()
         {
@@ -36,25 +37,8 @@ namespace SCMYazilim.Controllers
         }
 
         [Route("uyelik")]
-        public ActionResult SignUp(UserViewModel userViewModel)
+        public ActionResult SignUp()
         {
-
-            if (ModelState.IsValid)
-            {
-                BL_Result<CustomerInfo> bl_result = customerManager.LogIn(userViewModel);
-                if (bl_result.Messages.Count > 0)
-                {
-                    bl_result.Messages.ForEach(x => ModelState.AddModelError("", x));
-
-                    return View();
-                }
-                else
-                {
-                    Session["customer"] = bl_result.Result;
-
-                    return View("Dashboard");
-                }
-            }
             return View();
         }
 
@@ -117,9 +101,11 @@ namespace SCMYazilim.Controllers
         [Authorize]
         public ActionResult Authorization()
         {
+            CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
+            String databaseName=customerInfos.CompanyName + customerInfos.CompanyId;
             List<CustomerInfo> infos = customerManager.GetCustomers();
-            //List<Remainder> remainder = Payment.;
-
+            float remainder = payment.GetRemainder(databaseName);
+            ViewBag.Remainder = remainder;
             return View(infos);
         }
 

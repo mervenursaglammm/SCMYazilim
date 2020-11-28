@@ -2,6 +2,7 @@
 using Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,14 @@ namespace Bl
 {
     public class Payment<T> where T : class
     {
-        private BL_Result<CustomerInfo> result1 = new BL_Result<CustomerInfo>();
         private static CreateDbContext createContext;
+        string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
 
-        /*public BL_Result<Remainder> GetRemainder()
+        public float GetRemainder(string databaseName)
         {
-            return createContext.Database.
-        }*/
+            createContext = new CreateDbContext(string.Format(baseConnectionString, databaseName));
+            float remainder = createContext.Remainders.Max(x => x.remainder);
+            return remainder;
+        }
     }
 }

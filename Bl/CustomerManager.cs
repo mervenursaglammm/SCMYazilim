@@ -27,7 +27,6 @@ namespace Bl
         private Repository<Customer> repo = new Repository<Customer>();
         private CustomerRepository<CustomerInfo> repo_customer = new CustomerRepository<CustomerInfo>();
         private static CreateDbContext createContext;
-       // private static string cnn;
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             var searchCompanyId = registerViewModel.CompanyId;
@@ -62,7 +61,7 @@ namespace Bl
 
                 if (customer != null)
                 {
-                    string deneme = customer.CompanyName + customer.Id;
+                    string deneme = customer.CompanyName + customer.CompanyId;
                     string databasename = Connection.DatabaseConnection(deneme);
                     if (databasename != "")
                     {
@@ -167,7 +166,7 @@ namespace Bl
                 customer.IsActive = true;
 
                 string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.Id));
+                createContext = new CreateDbContext(string.Format(baseConnectionString, customer.CompanyName + customer.CompanyId));
                 createContext.CustomerInfos.Add(new CustomerInfo()
                 {
                     Name = customer.Name,
@@ -192,10 +191,10 @@ namespace Bl
         {
             Customer customer = repo.Find( x => x.Email == userViewModel.Email);
             string CompanyName = repo.Find(x => x.CompanyId == customer.CompanyId && x.IsAdmin == true).CompanyName;
-            int Id = repo.Find(x => x.CompanyId == customer.CompanyId && x.IsAdmin == true).Id;
+            string companyId = repo.Find(x => x.CompanyId == customer.CompanyId && x.IsAdmin == true).CompanyId;
             if (customer != null)
             {
-                string companyDatabase = CompanyName + Id;
+                string companyDatabase = CompanyName + companyId;
                 string databaseName = Connection.DatabaseConnection(companyDatabase);
 
                 if (databaseName != "")
@@ -255,6 +254,7 @@ namespace Bl
             data.ProfileImage = contentUrl;
             createContext.SaveChanges();
         }
+
 
     }
 

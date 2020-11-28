@@ -240,7 +240,15 @@
 
 
                 <span class="separator"> </span>
-                <div id="remainder" class="userbox"> <b> Bakiye : @ViewBag.Remainder  ₺ </b></div>
+                <div id="remainder" class="userbox">
+                    <b>
+                        Bakiye : @if (Session["remainder"] != null)
+                        {
+                            var remainder = Session["remainder"];
+                            @remainder
+                        } ₺
+                    </b>
+                </div>
                 <span class="separator"> </span>
                 <div id="userbox" class="userbox">
                     <a href="#" data-toggle="dropdown">

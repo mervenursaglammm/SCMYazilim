@@ -92,6 +92,10 @@ namespace SCMYazilim.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(bl_result.Result.Name, false);
                     Session["customer"] = bl_result.Result;
+                    CustomerInfo customerInfos = Session["customer"] as CustomerInfo;
+                    String databaseName = customerInfos.CompanyName + customerInfos.CompanyId;
+                    float remainder = payment.GetRemainder(databaseName);
+                    Session["remainder"] = remainder;
                     return View("Dashboard");
                 }
             }
@@ -122,7 +126,11 @@ namespace SCMYazilim.Controllers
 
             return View("");
         }
-
+        [Authorize]
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
 
         public JsonResult uploadFile()
         {

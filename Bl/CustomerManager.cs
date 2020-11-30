@@ -34,36 +34,41 @@ namespace Bl
             if (registeredUserEmail == null)
             {
                 Customer admin = repo.Find(x => x.CompanyId == searchCompanyId);    //kayit olmaya calisan kullanici icin myDataBase icerisinde kayit olacagi sirketin admini araniyor.
-                var adminCompanyName = admin.CompanyName;
-                //CompanyId alani bos gelmemis ise kullanici myDataBase icerisine ekleniyor.
-                if (searchCompanyId != null)
+                if(admin!=null)
                 {
-                    if (registerViewModel.Password == registerViewModel.Repass)
+                    var adminCompanyName = admin.CompanyName;
+                    //CompanyId alani bos gelmemis ise kullanici myDataBase icerisine ekleniyor.
+                    if (searchCompanyId != null)
                     {
-                        int db_result = repo.Insert(new Customer()
+                        if (registerViewModel.Password == registerViewModel.Repass)
                         {
-                            Name = registerViewModel.Name,
-                            Email = registerViewModel.Email,
-                            Password = EncodePassword(registerViewModel.Password),
-                            Repass = EncodePassword(registerViewModel.Repass),
-                            IsActive = true,
-                            IsAdmin = false,
-                            Guid = "merve",
-                            CompanyId = registerViewModel.CompanyId,
-                            CreateDate = DateTime.Now,
-                            ModifiedDate = DateTime.Now,
-                            ModifiedUser = "System",
-                            CompanyName = adminCompanyName,
-                            Birthday = DateTime.Now
-                        });
+                            int db_result = repo.Insert(new Customer()
+                            {
+                                Name = registerViewModel.Name,
+                                Email = registerViewModel.Email,
+                                Password = EncodePassword(registerViewModel.Password),
+                                Repass = EncodePassword(registerViewModel.Repass),
+                                IsActive = true,
+                                IsAdmin = false,
+                                Guid = "merve",
+                                CompanyId = registerViewModel.CompanyId,
+                                CreateDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now,
+                                ModifiedUser = "System",
+                                CompanyName = adminCompanyName,
+                                Birthday = DateTime.Now
+                            });
+                        }
+                        else
+                        {
+                            result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                        }
                     }
-                    else
-                    {
-                        result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
-                    }
+               
 
-                    if (admin != null)   //Kayit olmaya calisan kullanicinin belirttigi companyId ye ait admin(sirket) bos degilse kullanici CustomerInfoes icerisine ekleniyor.
-                    {
+                      
+                    
+                        //Kayit olmaya calisan kullanicinin belirttigi companyId ye ait admin(sirket) bos degilse kullanici CustomerInfoes icerisine ekleniyor.
                         string deneme = admin.CompanyName + admin.CompanyId;
                         string databasename = Connection.DatabaseConnection(deneme);
                         if (databasename != "")
@@ -72,12 +77,12 @@ namespace Bl
                             createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
                             CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
 
-                            /*if (user != null)
+                            if (user != null)
                             {
                                 result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
                             }
                             else
-                            {*/
+                            {
                                 createContext.CustomerInfos.Add(new CustomerInfo()
                                 {
                                     Name = registerViewModel.Name,
@@ -93,10 +98,10 @@ namespace Bl
                                     Birthday = DateTime.Now
                                 });
                                 createContext.SaveChanges();
-                            //}
+                            }
                         }
 
-                    }
+                    
                     else
                     {
                         result.addError(ErrorMessages.CompanyNotFound, "Böyle bir şirket bulunamadı.");
@@ -104,16 +109,18 @@ namespace Bl
                 }
                 else
                 {
+                    result.addError(ErrorMessages.CompanyNotFound, "Böyle bir şirket bulunamadı.");
+                }
                     Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-                    /*//  Adminin daha once kayitli olma durumu kontrolu
+                    //  Adminin daha once kayitli olma durumu kontrolu
                     if (customer != null)
                     {
                         //result.Messages.Add("Kayıtlı kullanıcı");
                         result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
                     }
                     else
-                    {*/
-                        if (registerViewModel.Password == registerViewModel.Repass)
+                    {
+                        if (registerViewModel.Password == registerViewModel.Repass && registerViewModel.CompanyName!=null)
                         {
                             //admin kaydi yapiliyor.
                             int db_result = repo.Insert(new Customer()
@@ -145,13 +152,13 @@ namespace Bl
                                 MailHelper mailHelper = new MailHelper();
                                 mailHelper.SendMail(result.Result.Email, body);
                             }
-                        }
+                        
                         else
                         {
-                            result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                            result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor. Tekrar deneyiniz.");
                         }
 
-                    //}
+                    }
                 }
             }
             else

@@ -6,14 +6,14 @@
 }
 
 <div class="card-title-sign mt-3 text-right">
-    <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Sign In</h2>
+    <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Giriş</h2>
 </div>
 <div class="card-body">
     @using (Html.BeginForm("SignIn", "Home", FormMethod.Post))
     {
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         <div class="form-group mb-3">
-            <label>E-mail Address</label>
+            <label>E-posta</label>
             <div class="input-group">
                 @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-lg", name = "email", type = "text" })
                 <span class="input-group-append">
@@ -26,8 +26,8 @@
 
         <div class="form-group mb-3">
             <div class="clearfix">
-                <label class="float-left">Password</label>
-                <a href="pages-recover-password.html" class="float-right">Lost Password?</a>
+                <label class="float-left">Şifre</label>
+                <a href="pages-recover-password.html" class="float-right">Şifremi Unuttum?</a>
             </div>
             <div class="input-group">
                 @Html.TextBoxFor(model => model.Password, new { @class = "form-control form-control-lg", name = "pwd", type = "password" })
@@ -43,11 +43,11 @@
             <div class="col-sm-8">
                 <div class="checkbox-custom checkbox-default">
                     <input id="RememberMe" name="rememberme" type="checkbox" />
-                    <label for="RememberMe">Remember Me</label>
+                    <label for="RememberMe">Beni Hatırla</label>
                 </div>
             </div>
             <div class="col-sm-4 text-right">
-                <button type="submit" class="btn btn-primary mt-2">Sign In</button>
+                <button type="submit" class="btn btn-primary mt-2">Giriş Yap!</button>
             </div>
         </div>
 
@@ -55,14 +55,14 @@
             <span>or</span>
         </span>
 
-        <div class="mb-1 text-center">
+        <!-- <div class="mb-1 text-center">
             <a class="btn btn-facebook mb-3 ml-1 mr-1" href="#">Connect with <i class="fab fa-facebook-f"></i></a>
             <a class="btn btn-twitter mb-3 ml-1 mr-1" href="#">Connect with <i class="fab fa-twitter"></i></a>
-        </div>
+        </div> -->
 
         <p class="text-center">
-            Don't have an account yet?
-            @Html.ActionLink("Sign Up!", "SignUp", "Home")
+            Henüz bir hesabınız yok mu?
+            @Html.ActionLink("Kayıt Ol!", "SignUp", "Home")
         </p>
     }
 </div>

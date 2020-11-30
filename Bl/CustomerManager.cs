@@ -30,57 +30,59 @@ namespace Bl
         public BL_Result<Customer> Register(RegisterViewModel registerViewModel)
         {
             var searchCompanyId = registerViewModel.CompanyId;
-            //Kullanici kayit olmaya calisiyor.
-            if (searchCompanyId != null)
+            var registeredUserEmail = repo.Find(x => x.Email == registerViewModel.Email);
+            if (registeredUserEmail == null)
             {
-                if (registerViewModel.Password == registerViewModel.Repass)
+                Customer admin = repo.Find(x => x.CompanyId == searchCompanyId);    //kayit olmaya calisan kullanici icin myDataBase icerisinde kayit olacagi sirketin admini araniyor.
+                var adminCompanyName = admin.CompanyName;
+                //CompanyId alani bos gelmemis ise kullanici myDataBase icerisine ekleniyor.
+                if (searchCompanyId != null)
                 {
-
-                    int db_result = repo.Insert(new Customer()
+                    if (registerViewModel.Password == registerViewModel.Repass)
                     {
-                        Name = registerViewModel.Name,
-                        Email = registerViewModel.Email,
-                        Password = EncodePassword(registerViewModel.Password),
-                        Repass = EncodePassword(registerViewModel.Repass),
-                        IsActive = true,
-                        IsAdmin = false,
-                        Guid = "merve",
-                        CompanyId = registerViewModel.CompanyId,
-                        CreateDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now,
-                        ModifiedUser = "System",
-                        Birthday = DateTime.Now
-                    }) ;
-                }
-                else
-                {
-                    result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
-                }
-
-                Customer customer = repo.Find(x => x.CompanyId == searchCompanyId);
-
-                if (customer != null)
-                {
-                    string deneme = customer.CompanyName + customer.CompanyId;
-                    string databasename = Connection.DatabaseConnection(deneme);
-                    if (databasename != "")
+                        int db_result = repo.Insert(new Customer()
+                        {
+                            Name = registerViewModel.Name,
+                            Email = registerViewModel.Email,
+                            Password = EncodePassword(registerViewModel.Password),
+                            Repass = EncodePassword(registerViewModel.Repass),
+                            IsActive = true,
+                            IsAdmin = false,
+                            Guid = "merve",
+                            CompanyId = registerViewModel.CompanyId,
+                            CreateDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                            ModifiedUser = "System",
+                            CompanyName = adminCompanyName,
+                            Birthday = DateTime.Now
+                        });
+                    }
+                    else
                     {
-                        string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
-                        createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
-                        CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
-                   
-                      
-                        if (user != null)
+                        result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                    }
+
+                    if (admin != null)   //Kayit olmaya calisan kullanicinin belirttigi companyId ye ait admin(sirket) bos degilse kullanici CustomerInfoes icerisine ekleniyor.
+                    {
+                        string deneme = admin.CompanyName + admin.CompanyId;
+                        string databasename = Connection.DatabaseConnection(deneme);
+                        if (databasename != "")
                         {
-                            result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
-                        }
-                        else
-                        {
+                            string baseConnectionString = ConfigurationManager.ConnectionStrings["BaseConnectionString"].ConnectionString;
+                            createContext = new CreateDbContext(string.Format(baseConnectionString, databasename));
+                            CustomerInfo user = createContext.CustomerInfos.FirstOrDefault(x => x.Email == registerViewModel.Email);
+
+                            /*if (user != null)
+                            {
+                                result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
+                            }
+                            else
+                            {*/
                                 createContext.CustomerInfos.Add(new CustomerInfo()
                                 {
                                     Name = registerViewModel.Name,
                                     Email = registerViewModel.Email,
-                                    CompanyName = registerViewModel.CompanyName,
+                                    CompanyName = adminCompanyName,
                                     Password = EncodePassword(registerViewModel.Password),
                                     Repass = EncodePassword(registerViewModel.Repass),
                                     IsAdmin = false,
@@ -91,65 +93,70 @@ namespace Bl
                                     Birthday = DateTime.Now
                                 });
                                 createContext.SaveChanges();
+                            //}
                         }
-                    }
 
+                    }
+                    else
+                    {
+                        result.addError(ErrorMessages.CompanyNotFound, "Böyle bir şirket bulunamadı.");
+                    }
                 }
                 else
                 {
-                    result.addError(ErrorMessages.CompanyNotFound, "Böyle bir şirket bulunamadı.");
+                    Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
+                    /*//  Adminin daha once kayitli olma durumu kontrolu
+                    if (customer != null)
+                    {
+                        //result.Messages.Add("Kayıtlı kullanıcı");
+                        result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
+                    }
+                    else
+                    {*/
+                        if (registerViewModel.Password == registerViewModel.Repass)
+                        {
+                            //admin kaydi yapiliyor.
+                            int db_result = repo.Insert(new Customer()
+                            {
+                                Name = registerViewModel.Name,
+                                Email = registerViewModel.Email,
+                                CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
+                                Password = EncodePassword(registerViewModel.Password),
+                                Repass = EncodePassword(registerViewModel.Repass),
+                                IsActive = false,
+                                IsAdmin = true,
+                                Guid = Guid.NewGuid().ToString(),
+                                CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
+                                CreateDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now,
+                                ModifiedUser = "System",
+                                Birthday = DateTime.Now
+                            });
+
+                            if (db_result > 0)
+                            {  //admin icin aktivasyon maili
+                                result.Result = repo.Find(x => x.Email == registerViewModel.Email);
+                                //Aktivasyon Maili Gonderme
+                                string body = "Hello " + result.Result.Name + ",";
+                                body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: " + result.Result.CompanyId;
+                                body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
+                                body += "<br /><br />Thanks";
+
+                                MailHelper mailHelper = new MailHelper();
+                                mailHelper.SendMail(result.Result.Email, body);
+                            }
+                        }
+                        else
+                        {
+                            result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
+                        }
+
+                    //}
                 }
             }
             else
             {
-                Customer customer = repo.Find(x => x.Email == registerViewModel.Email);
-                //  Adminin daha once kayitli olma durumu kontrolu
-                if (customer != null)
-                {
-                    //result.Messages.Add("Kayıtlı kullanıcı");
-                    result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
-                }
-                else
-                {
-                    if (registerViewModel.Password == registerViewModel.Repass)
-                    {
-                        //admin kaydi yapiliyor.
-                        int db_result = repo.Insert(new Customer()
-                        {
-                            Name = registerViewModel.Name,
-                            Email = registerViewModel.Email,
-                            CompanyName = String.Join("", registerViewModel.CompanyName.Normalize(NormalizationForm.FormD).Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)),
-                            Password = EncodePassword(registerViewModel.Password),
-                            Repass = EncodePassword(registerViewModel.Repass),
-                            IsActive = false,
-                            IsAdmin = true,
-                            Guid = Guid.NewGuid().ToString(),
-                            CompanyId = Guid.NewGuid().ToString().Substring(0, 6),
-                            CreateDate = DateTime.Now,
-                            ModifiedDate = DateTime.Now,
-                            ModifiedUser = "System",
-                            Birthday = DateTime.Now
-                        });
-
-                        if (db_result > 0)
-                        {  //admin icin aktivasyon maili
-                            result.Result = repo.Find(x => x.Email == registerViewModel.Email);
-                            //Aktivasyon Maili Gonderme
-                            string body = "Hello " + result.Result.Name + ",";
-                            body += "<br /><br />Please click the following link to activate your account <br /> Your CompanyId: " + result.Result.CompanyId;
-                            body += "<br /><a href = '" + string.Format("{0}://{1}/Home/Activation/{2}", "https", "localhost:44313", result.Result.Guid) + "'>Click here to activate your account.</a>";
-                            body += "<br /><br />Thanks";
-
-                            MailHelper mailHelper = new MailHelper();
-                            mailHelper.SendMail(result.Result.Email, body);
-                        }
-                    }
-                    else
-                    {
-                        result.addError(ErrorMessages.PasswordsDoNotMatch, "Şifre eşleşmiyor.Tekrar deneyiniz.");
-                    }
-
-                }
+                result.addError(ErrorMessages.RegisteredUser, "Kayıtlı kullanıcı");
             }
             return result;
         }

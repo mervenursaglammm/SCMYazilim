@@ -180,8 +180,8 @@ namespace Bl
                     ModifiedDate = DateTime.Now,
                     ModifiedUser = "System",
                     Birthday = DateTime.Now,
-                    ProfileImage = "~/Content/Images/defaultUserImage.jpg"
-                }); ;
+                    ProfileImage = "",
+                }) ; 
                 createContext.SaveChanges();
 
                 repo.Update(customer);

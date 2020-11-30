@@ -72,7 +72,7 @@
     });
 
     / * her onay kutusuna ekli olan sinif temel alinarak onay kutusu degerleri aliniyor * /
-    $("#Hesapla").click(function () {
+    $(".chk").change(function () {
         getValueUsingClass();
         var topla = 0;
         
@@ -84,18 +84,20 @@
         var tarihFarki = lastDayOfMonth.getDate() - d.getDate() + 1;
         //alert(tarihFarki);
         $(".chk:checked").each(function () {
-           topla += parseFloat($(this).attr("no"));
+            topla += parseFloat($(this).attr("no") / 365);
+           
         });
-        var tutar = topla * tarihFarki;
+        var tutar = topla.toFixed(2) * tarihFarki;
+
         $("#tutar1").html(tutar + "₺");
        // var aciklama ="("+ d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " tarihinden " + lastDayOfMonth.getDate() + "." + (lastDayOfMonth.getMonth() + 1) + "." + lastDayOfMonth.getFullYear() + " tarihine kadar tutarı " + tutar + "₺'dir.)";
      
-       // alert(d.getMonth());
-
+        // alert(d.getMonth());
+      
         var bakiye = parseFloat($("#deneme").attr("no"));
         var aciklama = "";
         var lastDayOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
-        var sonrakiAyTutari = topla * lastDayOfNextMonth.getDate();
+        var sonrakiAyTutari = topla.toFixed(2) * lastDayOfNextMonth.getDate();
         if (bakiye >= tutar) {
           
             aciklama = "Belirttiğiniz seçeneklere göre " + d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " tarihinden " + lastDayOfMonth.getDate() + "." + (lastDayOfMonth.getMonth() + 1) + "." + lastDayOfMonth.getFullYear() + " tarihine kadar kullanabilirsiniz." +
